@@ -1,6 +1,6 @@
 (executable
  (public_name test_dream)
- (name main)
+ (name routes)
  (libraries yojson dream)
  (preprocess (pps lwt_ppx))
 )

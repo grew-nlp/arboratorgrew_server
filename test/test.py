@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:8080/upl"
+url = "http://localhost:8080/files_upload"
 
 payload = {}
 files=[

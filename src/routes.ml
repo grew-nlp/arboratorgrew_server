@@ -1,4 +1,3 @@
-open Printf
 
 (*   curl -X POST -d 'Some Data' 'http://localhost:8080/echo'    *)
 let _echo_6 () =
@@ -78,48 +77,34 @@ let _coookie_c () =
       Lwt.return response
 
 
-(*
-      curl --location 'http://localhost:8080' \
-      --header 'Content-Type: application/x-www-form-urlencoded' \
-      --data-urlencode 'message=le message !!'
-*)
-  let _form_d_reduced () =
-  Dream.run
-  @@ Dream.logger
-  @@ Dream.router [
+let form_route = 
+  Dream.post "form"
+  (fun request ->
+    match%lwt Dream.form ~csrf:false request with
+    | `Ok ["message", message] ->
+      Dream.html (Printf.sprintf ">>>>%s<<<<" message)
+    | _ ->
+      Dream.empty `Bad_Request)
 
-    Dream.post "/"
-      (fun request ->
-        match%lwt Dream.form ~csrf:false request with
-        | `Ok ["message", message] ->
-          Dream.html (Printf.sprintf ">>>>%s<<<<" message)
-        | _ ->
-          Dream.empty `Bad_Request);
+(* https://github.com/aantron/dream/tree/master/example/f-static *)
+let static_route =
+  Dream.get "/static/**" (Dream.static "static")
 
-  ]
-
-
-
-let report files =
-  files
-  |> List.map 
-    (fun (name, content) -> 
-      sprintf "file: %s length: %d" 
-      (match name with Some s -> s | None -> "???")
-      (String.length content))
-  |> String.concat "\n"
-  |> sprintf "%s\n"
-
-let _multipart () =
-  Dream.run
-  @@ Dream.logger
-  @@ Dream.router [
-
-  Dream.post "upl" (fun request ->
+(* https://github.com/aantron/dream/tree/master/example/g-upload *)
+let files_upload_route =
+  Dream.post "files_upload" (fun request ->
     match%lwt Dream.multipart ~csrf:false request with
-    | `Ok ["files", files] -> Dream.html (report files)
-    | _ -> Dream.empty `Bad_Request);
-  ]
-  (* curl --location 'http://localhost:8080' --form 'files=@"file_A"' --form 'files=@"file_B"'  *)
+    | `Ok ["files", files] ->
+      Dream.html (Utils.report files)
+    | _ -> Dream.empty `Bad_Request)
 
-let _ = _multipart ()
+let all_routes = [
+  form_route;
+  static_route;
+  files_upload_route;
+]
+
+let _ =
+  Dream.run
+  @@ Dream.logger
+  @@ Dream.router all_routes
