@@ -3,6 +3,7 @@ doc:
 	@echo "make curl_form"
 	@echo "make curl_static"
 	@echo "make curl_files_upload"
+	@echo "make curl_stream_upload"
 
 curl_form:
 	curl --location 'http://localhost:8080/form' \
@@ -14,5 +15,10 @@ curl_static:
 
 curl_files_upload:
 	curl --location 'http://localhost:8080/files_upload' \
+		--form 'files=@"file_A"' \
+		--form 'files=@"file_B"'
+
+curl_stream_upload:
+	curl --location 'http://localhost:8080/stream_upload' \
 		--form 'files=@"file_A"' \
 		--form 'files=@"file_B"'

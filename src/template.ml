@@ -100,10 +100,37 @@ let files_upload_route =
       Dream.respond (Yojson.Basic.pretty_to_string json)
     | _ -> Dream.empty `Bad_Request)
 
+
+
+let report files =
+  List.iter (fun (name_opt, size) ->
+    let name =
+      match name_opt with
+      | None -> failwith "No name??"
+      | Some n -> n in
+    Printf.printf "name:%s size:%d\n%!" name size
+  ) files;
+  "Done"
+
+let stream_upload_route = 
+  Dream.post "stream_upload"
+    (fun request ->
+      let rec receive file_sizes =
+        match%lwt Dream.upload request with
+        | None -> Dream.html (report (List.rev file_sizes))
+        | Some (_, filename, _) ->
+          let rec count_size size =
+            match%lwt Dream.upload_part request with
+            | None -> receive ((filename, size)::file_sizes)
+            | Some chunk -> count_size (size + String.length chunk) in
+          count_size 0 in
+        receive [])
+
 let all_routes = [
   form_route;
   static_route;
   files_upload_route;
+  stream_upload_route;
 ]
 
 let _ =
