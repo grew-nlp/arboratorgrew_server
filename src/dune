@@ -1,7 +1,7 @@
 (executable
- (public_name test_dream)
- (name routes)
- (libraries yojson dream)
+ (public_name template)
+ (name template)
+ (libraries yojson dream ANSITerminal)
  (preprocess (pps lwt_ppx))
 )
 

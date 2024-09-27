@@ -1,8 +1,8 @@
 doc:
-	@echo: make all 
-	@echo: make curl_form
-	@echo: make curl_static
-	@echo: make curl_files_upload
+	@echo "make all" 
+	@echo "make curl_form"
+	@echo "make curl_static"
+	@echo "make curl_files_upload"
 
 curl_form:
 	curl --location 'http://localhost:8080/form' \

@@ -1,3 +1,4 @@
+open Utils
 
 (*   curl -X POST -d 'Some Data' 'http://localhost:8080/echo'    *)
 let _echo_6 () =
@@ -24,7 +25,6 @@ let _debug_8 () =
     Dream.get "/fail"
       (fun _ ->
         raise (Failure "The Web app failed!"));
-
   ]
 
 let _log_a () =
@@ -95,7 +95,9 @@ let files_upload_route =
   Dream.post "files_upload" (fun request ->
     match%lwt Dream.multipart ~csrf:false request with
     | `Ok ["files", files] ->
-      Dream.html (Utils.report files)
+      let json = wrap Services.report files in
+      Log.info "<files_upload> ==> %s" (report_status json);
+      Dream.respond (Yojson.Basic.pretty_to_string json)
     | _ -> Dream.empty `Bad_Request)
 
 let all_routes = [
@@ -105,6 +107,11 @@ let all_routes = [
 ]
 
 let _ =
+  let required = ["port"] in
+  Dream_config.load ~required ();
+  Log.init ();
   Dream.run
+    ~error_handler:Dream.debug_error_handler
+    ~port: (Dream_config.get_int "port")
   @@ Dream.logger
   @@ Dream.router all_routes
