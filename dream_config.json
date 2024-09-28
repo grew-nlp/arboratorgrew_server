@@ -1,4 +1,5 @@
 {
 	"port": 8080,
-	"log": "/Users/guillaum/code/dream/template/log"
+	"storage": "/Users/guillaum/.local/arborator_grew/storage",
+	"log": "/Users/guillaum/github/grew-nlp/ag_server/log"
 }

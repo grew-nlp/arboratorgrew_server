@@ -1,7 +1,7 @@
 (executable
- (public_name template)
- (name template)
- (libraries yojson dream ANSITerminal)
+ (public_name ag_server)
+ (name main)
+ (libraries yojson dream ANSITerminal conll grewlib)
  (preprocess (pps lwt_ppx))
 )
 

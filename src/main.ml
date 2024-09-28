@@ -1,4 +1,4 @@
-open Utils
+open Dream_utils
 
 (*   curl -X POST -d 'Some Data' 'http://localhost:8080/echo'    *)
 let _echo_6 () =
@@ -101,30 +101,25 @@ let files_upload_route =
     | _ -> Dream.empty `Bad_Request)
 
 
-
-let report files =
-  List.iter (fun (name_opt, size) ->
-    let name =
-      match name_opt with
-      | None -> failwith "No name??"
-      | Some n -> n in
-    Printf.printf "name:%s size:%d\n%!" name size
-  ) files;
-  "Done"
-
 let stream_upload_route = 
   Dream.post "stream_upload"
     (fun request ->
-      let rec receive file_sizes =
+      let rec receive files_received =
         match%lwt Dream.upload request with
-        | None -> Dream.html (report (List.rev file_sizes))
-        | Some (_, filename, _) ->
-          let rec count_size size =
+        | None -> Dream.html (String.concat "," files_received)
+        | Some (_, None, _) -> receive files_received
+        | Some (_, Some filename, _) ->
+          let out_ch = open_out (Filename.concat "upload" filename) in
+          let rec save_chunk () =
             match%lwt Dream.upload_part request with
-            | None -> receive ((filename, size)::file_sizes)
-            | Some chunk -> count_size (size + String.length chunk) in
-          count_size 0 in
+            | None -> receive (filename::files_received)
+            | Some chunk -> 
+              Printf.fprintf out_ch "%s%!" chunk;
+              save_chunk () in
+          save_chunk () in
         receive [])
+
+
 
 let all_routes = [
   form_route;
@@ -137,6 +132,10 @@ let _ =
   let required = ["port"] in
   Dream_config.load ~required ();
   Log.init ();
+  let _ = 
+    try Unix.mkdir (Dream_config.get_string "storage") 0o755
+    with Unix.Unix_error(Unix.EEXIST, _, _) -> Ags_main.load_from_storage () in
+
   Dream.run
     ~error_handler:Dream.debug_error_handler
     ~port: (Dream_config.get_int "port")

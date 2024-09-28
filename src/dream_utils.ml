@@ -77,7 +77,7 @@ module Log = struct
     | None -> ()
     | Some log_dir ->
       try
-        let basename = Printf.sprintf "template_%s.log" (time_stamp ()) in
+        let basename = Printf.sprintf "ag_server_%s.log" (time_stamp ()) in
         let filename = Filename.concat log_dir basename in
         out_ch := open_out filename
       with Sys_error msg -> stop "%s" msg
