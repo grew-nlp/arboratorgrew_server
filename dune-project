@@ -1,6 +1,6 @@
 (lang dune 3.16)
 
-(name test_dream)
+(name ag_server)
 
 (generate_opam_files true)
 
@@ -16,7 +16,7 @@
 (documentation https://url/to/documentation)
 
 (package
- (name test_dream)
+ (name ag_server)
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends ocaml dune)

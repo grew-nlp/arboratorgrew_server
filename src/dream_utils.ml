@@ -1,4 +1,5 @@
 open Printf
+open Grewlib
 
 exception Error of string
 let _error s = raise (Error (sprintf "%s\n%!" s))
@@ -109,3 +110,40 @@ let wrap fct last_arg =
     (* TODO: add Error from project specific librairies  *)
     | exc -> `Assoc [ ("status", `String "BUG"); ("Unexpected exception", `String (Printexc.to_string exc)) ] in
   json
+
+let reply json = Dream.respond (Yojson.Basic.pretty_to_string json)
+
+
+let _reply_error s = 
+  let msg = sprintf "%s\n%!" s in
+  reply (`Assoc [ ("status", `String "ERROR"); ("message", `String msg) ])
+
+let reply_error s = Printf.ksprintf _reply_error s
+
+
+(* General function for handling request with a mix of parameter and files *)
+let stream_request request = 
+  let buff = Buffer.create 32 in
+  let rec loop (param_map, file_list) =
+    match%lwt Dream.upload request with
+    | None -> Lwt.return (param_map, file_list)
+    | Some (None, None, _) -> assert false 
+    | Some (Some key, None, _) ->
+      begin
+        Buffer.clear buff;
+        let rec save_chunk_param () =
+          match%lwt Dream.upload_part request with
+          | None -> loop (String_map.add key (Buffer.contents buff) param_map, file_list)
+          | Some chunk -> bprintf buff "%s" chunk; save_chunk_param () in
+        save_chunk_param ()
+      end
+    | Some (_, Some _, _) ->
+      let filename = Filename.concat "upload" (sprintf "%.0f" (Unix.gettimeofday() *. 1000.)) in
+      let out_ch = open_out filename in
+      let rec save_chunk () =
+        match%lwt Dream.upload_part request with
+        | None -> close_out out_ch; loop (param_map, filename :: file_list)
+        | Some chunk -> fprintf out_ch "%s%!" chunk; save_chunk () in
+      save_chunk () in
+  loop (String_map.empty, [])
+

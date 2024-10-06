@@ -1,131 +1,285 @@
 open Dream_utils
+open Ags_main
+open Grewlib
 
-(*   curl -X POST -d 'Some Data' 'http://localhost:8080/echo'    *)
-let _echo_6 () =
-  Dream.run
-  @@ Dream.logger
-  @@ Dream.router [
+let ping_route = 
+  Dream.post "ping" (fun _ -> Dream.html ~headers:["Content-Type", "text/plain"] "{}")
 
-    Dream.post "/echo" (fun request ->
-      let%lwt body = Dream.body request in
-      Dream.respond
-        ~headers:["Content-Type", "application/octet-stream"]
-        body);
-  ]
-
-let _debug_8 () =
-  Dream.run ~error_handler:Dream.debug_error_handler
-  @@ Dream.logger
-  @@ Dream.router [
-
-    Dream.get "/bad"
-      (fun _ ->
-        Dream.empty `Bad_Request);
-
-    Dream.get "/fail"
-      (fun _ ->
-        raise (Failure "The Web app failed!"));
-  ]
-
-let _log_a () =
-  Dream.run ~error_handler:Dream.debug_error_handler
-  @@ Dream.logger
-  @@ Dream.router [
-
-    Dream.get "/"
-      (fun request ->
-        Dream.log "Sending greeting to %s!" (Dream.client request);
-        Dream.html "Good morning, world!");
-
-    Dream.get "/fail"
-      (fun _ ->
-        Dream.warning (fun log -> log "Raising an exception!");
-        raise (Failure "The Web app failed!"));
-  ]
-
-let _session_b () =
-  Dream.run
-  @@ Dream.logger
-  @@ Dream.memory_sessions
-  @@ fun request ->
-
-    match Dream.session_field request "user" with
-    | None ->
-      let%lwt () = Dream.invalidate_session request in
-      let%lwt () = Dream.set_session_field request "user" "alice" in
-      Dream.html "You weren't logged in; but now you are!"
-
-    | Some username ->
-      Printf.ksprintf
-        Dream.html "Welcome back, %s!" (Dream.html_escape username)
-
-let _coookie_c () =
-  Dream.run
-  @@ Dream.set_secret "foo"
-  @@ Dream.logger
-  @@ fun request ->
-
-    match Dream.cookie request "ui.language" with
-    | Some value ->
-      Printf.ksprintf
-        Dream.html "Your preferred language is %s!" (Dream.html_escape value)
-
-    | None ->
-      let response = Dream.response "Set language preference; come again!" in
-      Dream.add_header response "Content-Type" Dream.text_html;
-      Dream.set_cookie response request "ui.language" "ut-OP";
-      Lwt.return response
-
-
-let form_route = 
-  Dream.post "form"
-  (fun request ->
-    match%lwt Dream.form ~csrf:false request with
-    | `Ok ["message", message] ->
-      Dream.html (Printf.sprintf ">>>>%s<<<<" message)
-    | _ ->
-      Dream.empty `Bad_Request)
-
-(* https://github.com/aantron/dream/tree/master/example/f-static *)
-let static_route =
-  Dream.get "/static/**" (Dream.static "static")
-
-(* https://github.com/aantron/dream/tree/master/example/g-upload *)
-let files_upload_route =
-  Dream.post "files_upload" (fun request ->
-    match%lwt Dream.multipart ~csrf:false request with
-    | `Ok ["files", files] ->
-      let json = wrap Services.report files in
-      Log.info "<files_upload> ==> %s" (report_status json);
-      Dream.respond (Yojson.Basic.pretty_to_string json)
-    | _ -> Dream.empty `Bad_Request)
-
-
-let stream_upload_route = 
-  Dream.post "stream_upload"
+let new_project_route =
+  Dream.post "newProject"
     (fun request ->
-      let rec receive files_received =
-        match%lwt Dream.upload request with
-        | None -> Dream.html (String.concat "," files_received)
-        | Some (_, None, _) -> receive files_received
-        | Some (_, Some filename, _) ->
-          let out_ch = open_out (Filename.concat "upload" filename) in
-          let rec save_chunk () =
-            match%lwt Dream.upload_part request with
-            | None -> receive (filename::files_received)
-            | Some chunk -> 
-              Printf.fprintf out_ch "%s%!" chunk;
-              save_chunk () in
-          save_chunk () in
-        receive [])
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok ["project_id", project_id] ->
+        let json = wrap new_project project_id in
+        Log.info "<newProject> project_id=[%s] ==> %s" project_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
 
+let get_projects_route =
+  Dream.post "getProjects"
+    (fun request ->
+      match%lwt Dream.body request with
+      | "" -> 
+        let json = wrap get_projects () in
+        Log.info "<newProject> ==> %s" (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
 
+let get_user_projects_route =
+  Dream.post "getUserProjects"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok ["user_id", user_id] ->
+        let json = wrap get_user_projects user_id in
+        Log.info "<getUserProjects> user_id=[%s] ==> %s" user_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let erase_project_route =
+  Dream.post "eraseProject"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok ["project_id", project_id] ->
+        let json = wrap erase_project project_id in
+        Log.info "<eraseProject> project_id=[%s] ==> %s" project_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let rename_project_route =
+  Dream.post "renameProject"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let new_project_id = List.assoc "new_project_id" param in
+        let json = wrap (rename_project project_id) new_project_id in
+        Log.info "<renameProject> project_id=[%s] new_project_id=[%s] ==> %s" project_id new_project_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_project_config_route =
+  Dream.post "getProjectConfig"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok ["project_id", project_id] ->
+        let json = wrap get_project_config project_id in
+        Log.info "<getProjectConfig> project_id=[%s] ==> %s" project_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let update_project_config_route =
+  Dream.post "updateProjectConfig"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let config = List.assoc "config" param in
+        let json = wrap (update_project_config project_id) config in
+        Log.info "<updateProjectConfig> project_id=[%s] config=[%s] ==> %s" project_id config (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let new_samples_route =
+  Dream.post "newSamples"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (new_samples project_id) sample_ids in
+        Log.info "<newSamples> project_id=[%s] sample_ids=[%s] ==> %s" project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_samples_route =
+  Dream.post "getSamples"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok ["project_id", project_id] ->
+        let json = wrap get_samples project_id in
+        Log.info "<getSamples> project_id=[%s] ==> %s" project_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let erase_samples_route =
+  Dream.post "eraseSamples"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (erase_samples project_id) sample_ids in
+        Log.info "<eraseSamples> project_id=[%s] sample_ids=[%s] ==> %s" project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let rename_sample_route =
+  Dream.post "renameSample"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id = List.assoc "sample_id" param in
+        let new_sample_id = List.assoc "new_sample_id" param in
+        let json = wrap (rename_sample project_id sample_id) new_sample_id in
+        Log.info "<renameSample> project_id=[%s] sample_id=[%s] new_sample_id=[%s] ==> %s" project_id sample_id new_sample_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let erase_sentence_route =
+  Dream.post "eraseSentence"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id = List.assoc "sample_id" param in
+        let sent_id = List.assoc "sent_id" param in
+        let json = wrap (erase_sentence project_id sample_id) sent_id in
+        Log.info "<eraseSentence> project_id=[%s] sample_id=[%s] sent_id=[%s] ==> %s" project_id sample_id sent_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let erase_graphs_route =
+  Dream.post "eraseGraphs"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id = List.assoc "sample_id" param in
+        let sent_ids = List.assoc "sent_ids" param in
+        let user_id = List.assoc "user_id" param in
+        let json = wrap (erase_graphs project_id sample_id sent_ids) user_id in
+        Log.info "<eraseGraphs> project_id=[%s] sample_id=[%s] sent_ids=[%s] user_id=[%s] ==> %s" project_id sample_id sent_ids user_id (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_conll_route =
+  Dream.post "getConll"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id = List.assoc "sample_id" param in
+        let sent_id_opt = List.assoc_opt "sent_id" param in
+        let user_id_opt = List.assoc_opt "user_id" param in
+        begin
+          match (sent_id_opt, user_id_opt) with
+          | (Some sent_id, Some user_id) ->
+            let json = wrap (get_conll__user project_id sample_id sent_id) user_id in
+            Log.info "<getConll#1> project_id=[%s] sample_id=[%s] sent_id=[%s] user_id=[%s] ==> %s" project_id sample_id sent_id user_id (report_status json);
+            reply json
+          | (Some sent_id, None) ->
+            let json = wrap (get_conll__sent_id project_id sample_id) sent_id in
+            Log.info "<getConll#2> project_id=[%s] sample_id=[%s] sent_id=[%s] ==> %s" project_id sample_id sent_id (report_status json);
+            reply json
+          | (None, None) ->
+            let json = wrap (get_conll__sample project_id) sample_id in
+            Log.info "<getConll#3> project_id=[%s] sample_id=[%s] ==> %s" project_id sample_id (report_status json);
+            reply json
+          | _ -> Dream.empty `Bad_Request
+        end
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_users_route =
+  Dream.post "getUsers"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id_opt = List.assoc_opt "sample_id" param in
+        let sent_id_opt = List.assoc_opt "sent_id" param in
+        begin
+          match (sample_id_opt, sent_id_opt) with
+          | (Some sample_id, Some sent_id) ->
+            let json = wrap (get_users__sentence project_id sample_id) sent_id in
+            Log.info "<getUsers#1> project_id=[%s] sample_id=[%s] sent_id=[%s] ==> %s" project_id sample_id sent_id (report_status json);
+            reply json
+          | (Some sample_id, None) ->
+            let json = wrap (get_users__sample project_id) sample_id in
+            Log.info "<getUsers#2> project_id=[%s] sample_id=[%s] ==> %s" project_id sample_id (report_status json);
+            reply json
+          | (None, None) ->
+            let json = wrap get_users__project project_id in
+            Log.info "<getUsers#3> project_id=[%s] ==> %s" project_id (report_status json);
+            reply json
+          | _ -> Dream.empty `Bad_Request
+        end
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_sent_ids_route =
+  Dream.post "getSentIds"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id_opt = List.assoc_opt "sample_id" param in
+        begin
+          match sample_id_opt with
+          | Some sample_id ->
+            let json = wrap (get_sent_ids__sample project_id) sample_id in
+            Log.info "<getSentIds#1> project_id=[%s] sample_id=[%s] ==> %s" project_id sample_id (report_status json);
+            reply json
+          | None ->
+            let json = wrap get_sent_ids__project project_id in
+            Log.info "<getSentIds#2> project_id=[%s] ==> %s" project_id (report_status json);
+            reply json
+        end
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let save_conll_route = 
+  Dream.post "saveConll"
+    (fun request ->
+      match%lwt stream_request request with
+      | (map,[file]) ->
+        let project_id = String_map.find "project_id" map in
+        let sample_id = String_map.find "sample_id" map in
+        let json = wrap (save_conll project_id sample_id) file in
+        Log.info "<saveConll> project_id=[%s] sample_id=[%s] ==> %s" project_id sample_id (report_status json);
+        reply json
+      | (_,l) ->
+        reply_error "<saveConll> received %d files (1 expected)" (List.length l)
+      )
 
 let all_routes = [
-  form_route;
-  static_route;
-  files_upload_route;
-  stream_upload_route;
+  ping_route;
+
+  new_project_route;
+  get_projects_route;
+  get_user_projects_route;
+  erase_project_route;
+  rename_project_route;
+
+  get_project_config_route;
+  update_project_config_route;
+
+  new_samples_route;
+  get_samples_route;
+  erase_samples_route;
+  rename_sample_route;
+
+  erase_sentence_route;
+  erase_graphs_route;
+  get_conll_route;
+  get_users_route;
+  get_sent_ids_route;
+
+  save_conll_route;
 ]
 
 let _ =

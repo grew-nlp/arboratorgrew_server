@@ -95,6 +95,7 @@ let free_project project_id =
     current_projects := String_map.add project_id (Disk infos) !current_projects
 
 let free_outdated () =
+  Log.start ();
   let kept_on_disk = ref 0 in
   let kept_in_mem = ref [] in
   let removed_from_mem = ref [] in
@@ -250,11 +251,10 @@ let parse_meta meta =
 
 (* user_id is given in the ConLL *)
 let save_conll project_id sample_id conll_file =
-  let tmp_filename = (* Eliom_request_info.get_tmp_filename *) conll_file in
   let (config, project, sample) = get_project_sample project_id sample_id in
 
   let conll_corpus =
-    try Conll_corpus.load ~config tmp_filename
+    try Conll_corpus.load ~config conll_file
     with Conll_error js -> raise (Error (sprintf "Conll_error: %s" (Yojson.Basic.pretty_to_string js))) in
 
   let new_sample = Array.fold_left (
