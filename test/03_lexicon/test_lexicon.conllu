@@ -1,0 +1,9 @@
+# user_id = test
+1	moule	moule	NOUN	_	Gender=Fem|Number=Sing	_	_	_	_
+2	moule	moule	NOUN	_	Gender=Fem|Number=Sing	_	_	_	_
+3	moule	moule	NOUN	_	Gender=Masc|Number=Sing	_	_	_	_
+4	maison	maison	NOUN	_	Gender=Fem|Number=Sing	_	_	_	_
+5	maison	maison	NOUN	_	Gender=Fem|Number=Sing	_	_	_	_
+6	souris	souris	NOUN	_	Gender=Fem	_	_	_	_
+7	souris	souris	NOUN	_	Gender=Fem|Number=Plur	_	_	_	_
+

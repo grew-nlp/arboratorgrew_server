@@ -1,0 +1,173 @@
+# sent_id = fr-ud-test_00015
+# text = Belle, grande, claire, séduisante à souhait, elle est pourtant déjà à la retraite.
+# user_id = ud
+1	Belle	beau	ADJ	_	Gender=Fem|Number=Sing	12	mod	_	SpaceAfter=No|wordform=belle
+2	,	,	PUNCT	_	_	3	punct	_	_
+3	grande	grand	ADJ	_	Gender=Fem|Number=Sing	1	conj	_	SpaceAfter=No
+4	,	,	PUNCT	_	_	5	punct	_	_
+5	claire	clair	ADJ	_	Gender=Fem|Number=Sing	3	conj	_	SpaceAfter=No
+6	,	,	PUNCT	_	_	7	punct	_	_
+7	séduisante	séduisant	ADJ	_	Gender=Fem|Number=Sing	5	conj	_	_
+8	à	à	ADP	_	_	7	mod	_	_
+9	souhait	souhait	NOUN	_	Gender=Masc|Number=Sing	8	comp:obj	_	SpaceAfter=No
+10	,	,	PUNCT	_	_	7	punct	_	_
+11	elle	il	PRON	_	Gender=Fem|Number=Sing|Person=3|PronType=Prs	12	subj	_	_
+12	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+13	pourtant	pourtant	ADV	_	_	12	mod	_	_
+14	déjà	déjà	ADV	_	_	12	mod	_	_
+15	à	à	ADP	_	_	12	comp:pred	_	_
+16	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	17	det	_	_
+17	retraite	retraite	NOUN	_	Gender=Fem|Number=Sing	15	comp:obj	_	SpaceAfter=No
+18	.	.	PUNCT	_	_	12	punct	_	_
+
+# sent_id = fr-ud-test_00016
+# text = Et si officiellement le Maroc n'a pas de relations diplomatiques « ouvertes » avec Israël, cela n'a jamais empêché des ministres de se rendre au royaume chérifien.
+# user_id = ud
+1	Et	et	CCONJ	_	_	20	cc	_	wordform=et
+2	si	si	SCONJ	_	_	20	mod	_	_
+3	officiellement	officiellement	ADV	_	_	7	mod	_	_
+4	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Maroc	Maroc	PROPN	_	Gender=Masc|Number=Sing	7	subj	_	_
+6	n'	ne	ADV	_	Polarity=Neg	7	mod	_	SpaceAfter=No
+7	a	avoir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	2	comp:obj	_	_
+8	pas	pas	ADV	_	Polarity=Neg	7	mod	_	_
+9	de	un	DET	_	Definite=Ind|Number=Plur|PronType=Art	10	det	_	_
+10	relations	relation	NOUN	_	Gender=Fem|Number=Plur	7	comp:obj	_	_
+11	diplomatiques	diplomatique	ADJ	_	Gender=Fem|Number=Plur	10	mod	_	_
+12	«	«	PUNCT	_	_	13	punct	_	_
+13	ouvertes	ouvert	ADJ	_	Gender=Fem|Number=Plur	10	mod	_	_
+14	»	»	PUNCT	_	_	13	punct	_	_
+15	avec	avec	ADP	_	_	10	udep	_	_
+16	Israël	Israël	PROPN	_	_	15	comp:obj	_	SpaceAfter=No
+17	,	,	PUNCT	_	_	2	punct	_	_
+18	cela	cela	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Dem	20	subj	_	_
+19	n'	ne	ADV	_	Polarity=Neg	20	mod	_	SpaceAfter=No
+20	a	avoir	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+21	jamais	jamais	ADV	_	Polarity=Neg	20	mod	_	_
+22	empêché	empêcher	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	20	comp:aux@tense	_	_
+23	des	un	DET	_	Definite=Ind|Number=Plur|PronType=Art	24	det	_	_
+24	ministres	ministre	NOUN	_	Gender=Masc|Number=Plur	22	comp:obj	_	_
+25	de	de	ADP	_	_	22	comp:obl@x	_	_
+26	se	se	PRON	_	Person=3|PronType=Prs	27	comp	_	InIdiom=Yes
+27	rendre	rendre	VERB	_	VerbForm=Inf	25	comp:obj	_	ExtPos=VERB|Idiom=Yes
+28-29	au	_	_	_	_	_	_	_	_
+28	à	à	ADP	_	_	27	comp:obl	_	_
+29	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	30	det	_	_
+30	royaume	royaume	NOUN	_	Gender=Masc|Number=Sing	28	comp:obj	_	_
+31	chérifien	chérifien	ADJ	_	Gender=Masc|Number=Sing	30	mod	_	SpaceAfter=No
+32	.	.	PUNCT	_	_	20	punct	_	_
+
+# sent_id = fr-ud-test_00017
+# text = Trois ans plus tard, il tient un discours sur la crise.
+# user_id = ud
+1	Trois	trois	NUM	_	Number=Plur	2	det	_	wordform=trois
+2	ans	an	NOUN	_	Gender=Masc|Number=Plur	7	mod	_	_
+3	plus	plus	ADV	_	_	4	mod	_	_
+4	tard	tard	ADV	_	_	2	mod	_	SpaceAfter=No
+5	,	,	PUNCT	_	_	2	punct	_	_
+6	il	il	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	7	subj	_	_
+7	tient	tenir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+8	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	9	det	_	_
+9	discours	discours	NOUN	_	Gender=Masc|Number=Sing	7	comp:obj	_	_
+10	sur	sur	ADP	_	_	9	udep	_	_
+11	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	12	det	_	_
+12	crise	crise	NOUN	_	Gender=Fem|Number=Sing	10	comp:obj	_	SpaceAfter=No
+13	.	.	PUNCT	_	_	7	punct	_	_
+
+# sent_id = fr-ud-test_00018
+# text = Je suis déchirée.
+# user_id = ud
+1	Je	il	PRON	_	Number=Sing|Person=1|PronType=Prs	2	subj	_	wordform=je
+2	suis	être	AUX	_	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	déchirée	déchiré	ADJ	_	Gender=Fem|Number=Sing	2	comp:pred	_	SpaceAfter=No
+4	.	.	PUNCT	_	_	2	punct	_	_
+
+# sent_id = fr-ud-test_00019
+# text = Selon lui, cette période sera mise à profit pour étudier les conséquences de l'accord sur les ressources de poisson, "ainsi que l'impact régional" des fonds versés par l'Union européenne, sur la base notamment des informations fournies par les autorités marocaines.
+# user_id = ud
+1	Selon	selon	ADP	_	_	6	mod	_	wordform=selon
+2	lui	lui	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	1	comp:obj	_	SpaceAfter=No
+3	,	,	PUNCT	_	_	1	punct	_	_
+4	cette	ce	DET	_	Gender=Fem|Number=Sing|PronType=Dem	5	det	_	_
+5	période	période	NOUN	_	Gender=Fem|Number=Sing	6	subj@pass	_	_
+6	sera	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	0	root	_	_
+7	mise	mettre	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	6	comp:aux@pass	_	_
+8	à	à	ADP	_	_	7	comp:obl	_	_
+9	profit	profit	NOUN	_	Gender=Masc|Number=Sing	8	comp:obj	_	_
+10	pour	pour	ADP	_	_	6	mod	_	_
+11	étudier	étudier	VERB	_	VerbForm=Inf	10	comp:obj	_	_
+12	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	13	det	_	_
+13	conséquences	conséquence	NOUN	_	Gender=Fem|Number=Plur	11	comp:obj	_	_
+14	de	de	ADP	_	_	13	udep	_	_
+15	l'	le	DET	_	Definite=Def|Number=Sing|PronType=Art	16	det	_	SpaceAfter=No
+16	accord	accord	NOUN	_	Gender=Masc|Number=Sing	14	comp:obj	_	_
+17	sur	sur	ADP	_	_	16	udep	_	_
+18	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	19	det	_	_
+19	ressources	ressource	NOUN	_	Gender=Fem|Number=Plur	17	comp:obj	_	_
+20	de	de	ADP	_	_	19	udep	_	_
+21	poisson	poisson	NOUN	_	Gender=Masc|Number=Sing	20	comp:obj	_	SpaceAfter=No
+22	,	,	PUNCT	_	_	27	punct	_	_
+23	"	"	PUNCT	_	_	27	punct	_	SpaceAfter=No
+24	ainsi	ainsi	ADV	_	_	27	cc	_	ExtPos=CCONJ|Idiom=Yes
+25	que	que	SCONJ	_	_	24	unk	_	InIdiom=Yes
+26	l'	le	DET	_	Definite=Def|Number=Sing|PronType=Art	27	det	_	SpaceAfter=No
+27	impact	impact	NOUN	_	Gender=Masc|Number=Sing	13	conj	_	_
+28	régional	régional	ADJ	_	Gender=Masc|Number=Sing	27	mod	_	SpaceAfter=No
+29	"	"	PUNCT	_	_	27	punct	_	_
+30-31	des	_	_	_	_	_	_	_	_
+30	de	de	ADP	_	_	27	udep	_	_
+31	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	32	det	_	_
+32	fonds	fonds	NOUN	_	Gender=Masc|Number=Plur	30	comp:obj	_	_
+33	versés	verser	VERB	_	Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part	32	mod	_	_
+34	par	par	ADP	_	_	33	comp:obl@agent	_	_
+35	l'	le	DET	_	Definite=Def|Number=Sing|PronType=Art	36	det	_	SpaceAfter=No
+36	Union	Union	PROPN	_	Gender=Fem|Number=Sing	34	comp:obj	_	_
+37	européenne	européen	ADJ	_	Gender=Fem|Number=Sing	36	mod	_	SpaceAfter=No
+38	,	,	PUNCT	_	_	39	punct	_	_
+39	sur	sur	ADP	_	_	11	mod	_	_
+40	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	41	det	_	_
+41	base	base	NOUN	_	Gender=Fem|Number=Sing	39	comp:obj	_	_
+42	notamment	notamment	ADV	_	_	41	mod	_	_
+43-44	des	_	_	_	_	_	_	_	_
+43	de	de	ADP	_	_	41	udep	_	_
+44	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	45	det	_	_
+45	informations	information	NOUN	_	Gender=Fem|Number=Plur	43	comp:obj	_	_
+46	fournies	fournir	VERB	_	Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part	45	mod	_	_
+47	par	par	ADP	_	_	46	comp:obl@agent	_	_
+48	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	49	det	_	_
+49	autorités	autorité	NOUN	_	Gender=Fem|Number=Plur	47	comp:obj	_	_
+50	marocaines	marocain	ADJ	_	Gender=Fem|Number=Plur	49	mod	_	SpaceAfter=No
+51	.	.	PUNCT	_	_	6	punct	_	_
+
+# sent_id = fr-ud-test_00020
+# text = Le 20 juin, le Secrétaire général de l'Elysée Claude Guéant a été reçu à Alger par le président Bouteflika et le Premier ministre Ahmed Ouyahia.
+# user_id = ud
+1	Le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	2	det	_	wordform=le
+2	20	20	NUM	_	Number=Sing	13	mod	_	_
+3	juin	juin	NOUN	_	Gender=Masc|Number=Sing	2	mod	_	SpaceAfter=No
+4	,	,	PUNCT	_	_	2	punct	_	_
+5	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	Secrétaire	Secrétaire	PROPN	_	Gender=Masc|Number=Sing	13	subj@pass	_	_
+7	général	général	ADJ	_	Gender=Masc|Number=Sing	6	mod	_	_
+8	de	de	ADP	_	_	6	udep	_	_
+9	l'	le	DET	_	Definite=Def|Number=Sing|PronType=Art	10	det	_	SpaceAfter=No
+10	Elysée	Elysée	PROPN	_	Number=Sing	8	comp:obj	_	_
+11	Claude	Claude	PROPN	_	_	6	appos	_	_
+12	Guéant	Guéant	PROPN	_	_	11	flat@name	_	_
+13	a	avoir	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+14	été	être	AUX	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	13	comp:aux@tense	_	_
+15	reçu	recevoir	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	14	comp:aux@pass	_	_
+16	à	à	ADP	_	_	15	mod	_	_
+17	Alger	Alger	PROPN	_	_	16	comp:obj	_	_
+18	par	par	ADP	_	_	15	comp:obl@agent	_	_
+19	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	20	det	_	_
+20	président	président	NOUN	_	Gender=Masc|Number=Sing	18	comp:obj	_	_
+21	Bouteflika	Bouteflika	PROPN	_	_	20	appos	_	_
+22	et	et	CCONJ	_	_	25	cc	_	_
+23	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	25	det	_	_
+24	Premier	premier	ADJ	_	Gender=Masc|Number=Sing	25	mod	_	wordform=premier
+25	ministre	ministre	NOUN	_	Gender=Masc|Number=Sing	20	conj	_	_
+26	Ahmed	Ahmed	PROPN	_	_	25	appos	_	_
+27	Ouyahia	Ouyahia	PROPN	_	_	26	flat@name	_	SpaceAfter=No
+28	.	.	PUNCT	_	_	13	punct	_	_
+

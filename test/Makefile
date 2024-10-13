@@ -1,24 +1,41 @@
-doc:
-	@echo "make all" 
-	@echo "make curl_form"
-	@echo "make curl_static"
-	@echo "make curl_files_upload"
-	@echo "make curl_stream_upload"
+selfdoc:
+	@echo "make local"
+	@echo "make dev"
+	@echo "make prod"
 
-curl_form:
-	curl --location 'http://localhost:8080/form' \
-		--header 'Content-Type: application/x-www-form-urlencoded' \
-		--data-urlencode 'message=le message !!'
+local:
+	@make -C 01_big_request local
+	@make -C 02_config local
+	@make -C 03_lexicon local
+	@make -C 04_multi_user local
+	@make -C 05_rewrite local
+	@make -C 06_saveGraph local
+	@make -C 07_saveGraphs local
+	@make -C 08_eraseGraphs local
+	@make -C 09_searchRequestInGraphs local
+	@make -C 10_split_sentence local
 
-curl_static:
-	curl --location 'http://localhost:8080/static/a.html' 
+dev:
+	@make -C 01_big_request dev
+	@make -C 02_config dev
+	@make -C 03_lexicon dev
+	@make -C 04_multi_user dev
+	@make -C 05_rewrite dev
+	@make -C 06_saveGraph dev
+	@make -C 07_saveGraphs dev
+	@make -C 08_eraseGraphs dev
+	@make -C 09_searchRequestInGraphs dev
+	@make -C 10_split_sentence dev
 
-curl_files_upload:
-	curl --location 'http://localhost:8080/files_upload' \
-		--form 'files=@"file_A"' \
-		--form 'files=@"file_B"'
-
-curl_stream_upload:
-	curl --location 'http://localhost:8080/stream_upload' \
-		--form 'files=@"file_A"' \
-		--form 'files=@"file_B"'
+prod:
+	@echo "**** This test may need to add IP in apache config on the prod server ****"
+	@make -C 01_big_request prod
+	@make -C 02_config prod
+	@make -C 03_lexicon prod
+	@make -C 04_multi_user prod
+	@make -C 05_rewrite prod
+	@make -C 06_saveGraph prod
+	@make -C 07_saveGraphs prod
+	@make -C 08_eraseGraphs prod
+	@make -C 09_searchRequestInGraphs prod
+	@make -C 10_split_sentence prod

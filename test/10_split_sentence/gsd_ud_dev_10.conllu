@@ -1,0 +1,256 @@
+# sent_id = fr-ud-dev_00001
+# text = Aviator, un film sur la vie de Hughes.
+# user_id = test
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+2	,	,	PUNCT	_	_	4	punct	_	_
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_
+5	sur	sur	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+8	de	de	ADP	_	_	9	case	_	_
+9	Hughes	Hughes	PROPN	_	_	7	nmod	_	SpaceAfter=No
+10	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# user_id = test
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	wordform=les
+2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
+3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	six	six	NUM	_	_	5	nummod	_	_
+5	ans	an	NOUN	_	Gender=Masc|Number=Plur	3	obj	_	_
+6	mais	mais	CCONJ	_	_	9	cc	_	_
+7	leur	son	DET	_	Gender=Masc|Number=Sing|Poss=Yes|PronType=Prs	8	det	_	_
+8	contenu	contenu	NOUN	_	Gender=Masc|Number=Sing	9	nsubj	_	_
+9	diffère	différer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	conj	_	_
+10	donc	donc	ADV	_	_	9	advmod	_	_
+11	selon	selon	ADP	_	_	13	case	_	_
+12	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	13	det	_	_
+13	Facultés	faculté	NOUN	_	Definite=Def|Number=Plur	9	obl	_	SpaceAfter=No|wordform=facultés
+14	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ?
+# user_id = test
+1	Mais	mais	CCONJ	_	_	3	cc	_	wordform=mais
+2	comment	comment	ADV	_	_	3	advmod	_	_
+3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_
+4	dans	dans	ADP	_	_	6	case	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	contexte	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl:mod	_	_
+7	structurellement	structurellement	ADV	_	_	8	advmod	_	_
+8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+9	?	?	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
+# user_id = test
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	SpaceAfter=No|wordform=l'
+2	«	«	PUNCT	_	_	3	punct	_	_
+3	oasis	oasis	NOUN	_	Gender=Fem|Number=Sing	23	nsubj	_	_
+4	de	de	ADP	_	_	5	case	_	_
+5	vie	vie	NOUN	_	Gender=Fem|Number=Sing	3	nmod	_	_
+6	»	»	PUNCT	_	_	3	punct	_	SpaceAfter=No
+7	,	,	PUNCT	_	_	3	punct	_	_
+8	dans	dans	ADP	_	_	10	case	_	_
+9	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	10	det	_	_
+10	milieu	milieu	NOUN	_	Gender=Masc|Number=Sing	23	obl:mod	_	_
+11	où	où	ADV	_	PronType=Rel	12	advmod	_	_
+12	règne	régner	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	10	acl:relcl	_	_
+13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+16	et	et	CCONJ	_	_	18	cc	_	_
+17	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+20	importante	important	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	SpaceAfter=No
+21	,	,	PUNCT	_	_	10	punct	_	_
+22	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	23	cop	_	_
+23	riche	riche	ADJ	_	Gender=Fem|Number=Sing	0	root	_	_
+24	et	et	CCONJ	_	_	25	cc	_	_
+25	varié	varié	ADJ	_	Gender=Masc|Number=Sing	23	conj	_	_
+26	:	:	PUNCT	_	_	30	punct	_	_
+27	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	28	det	_	_
+28	chercheurs	chercheur	NOUN	_	Gender=Masc|Number=Plur	30	nsubj	_	_
+29	y	y	PRON	_	_	30	obl:mod	_	_
+30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
+31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
+32	nouvelles	nouveau	ADJ	_	Gender=Fem|Number=Plur	33	amod	_	_
+33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
+34	de	de	ADP	_	_	35	case	_	_
+35	bivalves	bivalve	NOUN	_	Gender=Masc|Number=Plur	33	nmod	_	SpaceAfter=No
+36	,	,	PUNCT	_	_	38	punct	_	_
+37	de	de	ADP	_	_	38	case	_	_
+38	poissons	poisson	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	SpaceAfter=No
+39	,	,	PUNCT	_	_	41	punct	_	_
+40	de	de	ADP	_	_	41	case	_	_
+41	crustacés	crustacé	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	SpaceAfter=No
+42	,	,	PUNCT	_	_	44	punct	_	_
+43	de	de	ADP	_	_	44	case	_	_
+44	poulpes	poulpe	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	_
+45	dans	dans	ADP	_	_	47	case	_	_
+46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_
+47	zones	zone	NOUN	_	Gender=Fem|Number=Plur	30	obl:mod	_	_
+48	pensées	penser	VERB	_	Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part	47	acl	_	_
+49	jusqu'	jusque	ADP	_	_	50	case	_	SpaceAfter=No
+50	alors	alors	ADV	_	_	48	advmod	_	_
+51	désertiques	désertique	ADJ	_	Gender=Fem|Number=Plur	48	xcomp	_	SpaceAfter=No
+52	.	.	PUNCT	_	_	23	punct	_	_
+
+# sent_id = fr-ud-dev_00005
+# text = Travail de très grande qualité exécuté par un imprimeur artisan passionné.
+# user_id = test
+1	Travail	travail	NOUN	_	Gender=Masc|Number=Sing	0	root	_	wordform=travail
+2	de	de	ADP	_	_	5	case	_	_
+3	très	très	ADV	_	_	4	advmod	_	_
+4	grande	grand	ADJ	_	Gender=Fem|Number=Sing	5	amod	_	_
+5	qualité	qualité	NOUN	_	Gender=Fem|Number=Sing	1	nmod	_	_
+6	exécuté	exécuter	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	1	acl	_	_
+7	par	par	ADP	_	_	9	case	_	_
+8	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	9	det	_	_
+9	imprimeur	imprimeur	NOUN	_	Gender=Masc|Number=Sing	6	obl:agent	_	_
+10	artisan	artisan	NOUN	_	Gender=Masc|Number=Sing	9	nmod	_	_
+11	passionné	passionné	ADJ	_	Gender=Masc|Number=Sing	9	amod	_	SpaceAfter=No
+12	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00006
+# text = Rajesh Bhagwan (secrétaire général responsable de l'organisation) et Steve Obeegadoo (secrétaire général responsable des projets politiques, du renouveau intellectuel, de la formation et des relations internationales).
+# user_id = test
+1	Rajesh	Rajesh	PROPN	_	_	0	root	_	_
+2	Bhagwan	Bhagwan	PROPN	_	_	1	flat:name	_	_
+3	(	(	PUNCT	_	_	4	punct	_	SpaceAfter=No
+4	secrétaire	secrétaire	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_
+5	général	général	ADJ	_	Gender=Masc|Number=Sing	4	amod	_	_
+6	responsable	responsable	ADJ	_	Gender=Masc|Number=Sing	4	amod	_	_
+7	de	de	ADP	_	_	9	case	_	_
+8	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	9	det	_	SpaceAfter=No
+9	organisation	organisation	NOUN	_	Gender=Fem|Number=Sing	6	obl:arg	_	SpaceAfter=No
+10	)	)	PUNCT	_	_	4	punct	_	_
+11	et	et	CCONJ	_	_	12	cc	_	_
+12	Steve	Steve	PROPN	_	_	1	conj	_	_
+13	Obeegadoo	Obeegadoo	PROPN	_	_	12	flat:name	_	_
+14	(	(	PUNCT	_	_	15	punct	_	SpaceAfter=No
+15	secrétaire	secrétaire	NOUN	_	Gender=Masc|Number=Sing	12	appos	_	_
+16	général	général	ADJ	_	Gender=Masc|Number=Sing	15	amod	_	_
+17	responsable	responsable	ADJ	_	Gender=Masc|Number=Sing	15	amod	_	_
+18-19	des	_	_	_	_	_	_	_	_
+18	de	de	ADP	_	_	20	case	_	_
+19	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	20	det	_	_
+20	projets	projet	NOUN	_	Gender=Masc|Number=Plur	17	obl:arg	_	_
+21	politiques	politique	ADJ	_	Gender=Masc|Number=Plur	20	amod	_	SpaceAfter=No
+22	,	,	PUNCT	_	_	25	punct	_	_
+23-24	du	_	_	_	_	_	_	_	_
+23	de	de	ADP	_	_	25	case	_	_
+24	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	25	det	_	_
+25	renouveau	renouveau	NOUN	_	Gender=Masc|Number=Sing	20	conj	_	_
+26	intellectuel	intellectuel	ADJ	_	Gender=Masc|Number=Sing	25	amod	_	SpaceAfter=No
+27	,	,	PUNCT	_	_	30	punct	_	_
+28	de	de	ADP	_	_	30	case	_	_
+29	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	30	det	_	_
+30	formation	formation	NOUN	_	Gender=Fem|Number=Sing	20	conj	_	_
+31	et	et	CCONJ	_	_	34	cc	_	_
+32-33	des	_	_	_	_	_	_	_	_
+32	de	de	ADP	_	_	34	case	_	_
+33	les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	34	det	_	_
+34	relations	relation	NOUN	_	Gender=Fem|Number=Plur	20	conj	_	_
+35	internationales	international	ADJ	_	Gender=Fem|Number=Plur	34	amod	_	SpaceAfter=No
+36	)	)	PUNCT	_	_	15	punct	_	SpaceAfter=No
+37	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00007
+# text = Elle lutte pour échapper aux tueurs à ses trousses.
+# user_id = test
+1	Elle	il	PRON	_	Gender=Fem|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	wordform=elle
+2	lutte	lutter	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	pour	pour	ADP	_	_	4	mark	_	_
+4	échapper	échapper	VERB	_	VerbForm=Inf	2	advcl	_	_
+5-6	aux	_	_	_	_	_	_	_	_
+5	à	à	ADP	_	_	7	case	_	_
+6	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	7	det	_	_
+7	tueurs	tueur	NOUN	_	Gender=Masc|Number=Plur	4	obl:arg	_	_
+8	à	à	ADP	_	_	10	case	_	_
+9	ses	son	DET	_	Gender=Fem|Number=Plur|Poss=Yes|PronType=Prs	10	det	_	_
+10	trousses	trousses	NOUN	_	Gender=Fem|Number=Plur	4	obl:mod	_	SpaceAfter=No
+11	.	.	PUNCT	_	_	2	punct	_	_
+
+# sent_id = fr-ud-dev_00008
+# text = Les compagnies aériennes à bas coût ne connaissent pas la crise.
+# user_id = test
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	wordform=les
+2	compagnies	compagnie	NOUN	_	Gender=Fem|Number=Plur	8	nsubj	_	_
+3	aériennes	aérien	ADJ	_	Gender=Fem|Number=Plur	2	amod	_	_
+4	à	à	ADP	_	_	6	case	_	_
+5	bas	bas	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+6	coût	coût	NOUN	_	Gender=Masc|Number=Sing	2	nmod	_	_
+7	ne	ne	ADV	_	Polarity=Neg	8	advmod	_	_
+8	connaissent	connaître	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+9	pas	pas	ADV	_	Polarity=Neg	8	advmod	_	_
+10	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	11	det	_	_
+11	crise	crise	NOUN	_	Gender=Fem|Number=Sing	8	obj	_	SpaceAfter=No
+12	.	.	PUNCT	_	_	8	punct	_	_
+
+# sent_id = fr-ud-dev_00009
+# text = C'est véritablement pour le futur baptisé un changement de cap.
+# user_id = test
+1	C'	ce	PRON	_	Number=Sing|Person=3|PronType=Dem	9	nsubj	_	SpaceAfter=No|wordform=c'
+2	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	9	cop	_	_
+3	véritablement	véritablement	ADV	_	_	9	advmod	_	_
+4	pour	pour	ADP	_	_	7	case	_	_
+5	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	7	det	_	_
+6	futur	futur	ADJ	_	Gender=Masc|Number=Sing	7	amod	_	_
+7	baptisé	baptiser	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	9	obl:mod	_	_
+8	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	9	det	_	_
+9	changement	changement	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+10	de	de	ADP	_	_	11	case	_	_
+11	cap	cap	NOUN	_	Gender=Masc|Number=Sing	9	nmod	_	SpaceAfter=No
+12	.	.	PUNCT	_	_	9	punct	_	_
+
+# sent_id = fr-ud-dev_00010
+# text = Le gouvernement français a fait encore une fois l'objet de sévères reproches quant à son soutien inconditionnel au Maroc dans le dossier du Sahara occidental qui oppose ce dernier au Front Polisario depuis 35 ans.
+# user_id = test
+1	Le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	2	det	_	wordform=le
+2	gouvernement	gouvernement	NOUN	_	Gender=Masc|Number=Sing	5	nsubj	_	_
+3	français	français	ADJ	_	Gender=Masc|Number=Sing	2	amod	_	_
+4	a	avoir	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	5	aux:tense	_	_
+5	fait	faire	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+6	encore	encore	ADV	_	_	8	advmod	_	_
+7	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	8	det	_	_
+8	fois	fois	NOUN	_	Gender=Fem|Number=Sing	5	obl	_	_
+9	l'	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	10	det	_	SpaceAfter=No
+10	objet	objet	NOUN	_	Gender=Masc|Number=Sing	5	obj	_	_
+11	de	de	ADP	_	_	13	case	_	_
+12	sévères	sévère	ADJ	_	Gender=Masc|Number=Plur	13	amod	_	_
+13	reproches	reproche	NOUN	_	Gender=Masc|Number=Plur	10	nmod	_	_
+14	quant	quant	ADV	_	_	17	case	_	EXTPOS=ADP|Type=MWE
+15	à	à	ADP	_	_	14	fixed	_	_
+16	son	son	DET	_	Gender=Masc|Number=Sing|Poss=Yes|PronType=Prs	17	det	_	_
+17	soutien	soutien	NOUN	_	Gender=Masc|Number=Sing	13	nmod	_	_
+18	inconditionnel	inconditionnel	ADJ	_	Gender=Masc|Number=Sing	17	amod	_	_
+19-20	au	_	_	_	_	_	_	_	_
+19	à	à	ADP	_	_	21	case	_	_
+20	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	21	det	_	_
+21	Maroc	Maroc	PROPN	_	_	17	nmod	_	_
+22	dans	dans	ADP	_	_	24	case	_	_
+23	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	24	det	_	_
+24	dossier	dossier	NOUN	_	Gender=Masc|Number=Sing	17	nmod	_	_
+25-26	du	_	_	_	_	_	_	_	_
+25	de	de	ADP	_	_	27	case	_	_
+26	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	27	det	_	_
+27	Sahara	Sahara	PROPN	_	_	24	nmod	_	_
+28	occidental	occidental	ADJ	_	Gender=Masc|Number=Sing	27	amod	_	_
+29	qui	qui	PRON	_	PronType=Rel	30	nsubj	_	_
+30	oppose	opposer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	24	acl:relcl	_	_
+31	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	32	det	_	_
+32	dernier	dernier	ADJ	_	Gender=Masc|Number=Sing	30	obj	_	_
+33-34	au	_	_	_	_	_	_	_	_
+33	à	à	ADP	_	_	35	case	_	_
+34	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	35	det	_	_
+35	Front	Front	PROPN	_	_	30	obl:mod	_	_
+36	Polisario	Polisario	PROPN	_	_	35	flat:name	_	_
+37	depuis	depuis	ADP	_	_	39	case	_	_
+38	35	35	NUM	_	_	39	nummod	_	_
+39	ans	an	NOUN	_	Gender=Masc|Number=Plur	30	obl	_	SpaceAfter=No
+40	.	.	PUNCT	_	_	5	punct	_	_
+
