@@ -254,7 +254,167 @@ let save_conll_route =
         reply json
       | (_,l) ->
         reply_error "<saveConll> received %d files (1 expected)" (List.length l)
-      )
+    )
+
+let insert_conll_route = 
+  Dream.post "insertConll"
+    (fun request ->
+      match%lwt stream_request request with
+      | (map,[file]) ->
+        let project_id = String_map.find "project_id" map in
+        let sample_id = String_map.find "sample_id" map in
+        let pivot_sent_id = String_map.find "pivot_sent_id" map in
+        let json = wrap (insert_conll project_id sample_id pivot_sent_id) file in
+        Log.info "<insertConll> project_id=[%s] sample_id=[%s] pivot_sent_id=[%s] ==> %s" project_id sample_id pivot_sent_id (report_status json);
+        reply json
+      | (_,l) ->
+        reply_error "<insertConll> received %d files (1 expected)" (List.length l)
+    )
+
+let save_graph_route =
+  Dream.post "saveGraph"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_id = List.assoc "sample_id" param in
+        let user_id = List.assoc "user_id" param in
+        let conll_graph = List.assoc "conll_graph" param in
+        let json = wrap (save_graph project_id sample_id user_id) conll_graph in
+        Log.info "<saveGraph> project_id=[%s] sample_id=[%s] user_id=[%s] conll_graph=[%s] ==> %s"
+          project_id sample_id user_id conll_graph (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let search_request_in_graphs_route =
+  Dream.post "searchRequestInGraphs"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let user_ids = List.assoc "user_ids" param in
+        let request = List.assoc "request" param in
+        let clusters_opt = List.assoc_opt "clusters" param in
+
+        let cluster_keys = match clusters_opt with
+          | Some clusters -> Str.split (Str.regexp " *; *") clusters
+          | None -> [] in
+
+        let json = wrap (search_request_in_graphs project_id user_ids request) cluster_keys in
+        Log.info "<searchRequestInGraphs> project_id=[%s] user_ids=[%s] request=[%s]%s ==> %s"
+          project_id user_ids request 
+          (match clusters_opt with None -> "" | Some s -> Printf.sprintf " clusters=[%s]" s)
+          (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let relation_tables_route =
+  Dream.post "relationTables"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let user_ids = List.assoc "user_ids" param in
+        let json = wrap (relation_tables project_id sample_ids) user_ids in
+        Log.info "<relationTables> project_id=[%s] sample_ids=[%s] user_ids=[%s] ==> %s"
+          project_id sample_ids user_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let try_package_route =
+  Dream.post "tryPackage"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let user_ids = List.assoc "user_ids" param in
+        let package = List.assoc "package" param in
+        let json = wrap (try_package project_id sample_ids user_ids) package in
+        Log.info "<tryPackage> project_id=[%s] sample_ids=[%s] user_ids=[%s] package=[%s] ==> %s"
+          project_id sample_ids user_ids package (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let export_project_route =
+  Dream.post "exportProject"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (export_project project_id) sample_ids in
+        Log.info "<exportProject> project_id=[%s] sample_ids=[%s] ==> %s"
+          project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_lexicon_route =
+  Dream.post "getLexicon"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let user_ids = List.assoc "user_ids" param in
+        let features = List.assoc "features" param in
+        let prune = CCOption.map int_of_string (List.assoc_opt "prune" param) in
+        let json = wrap (get_lexicon features ?prune project_id user_ids) sample_ids in
+        Log.info "<getLexicon> project_id=[%s] sample_ids=[%s] user_ids=[%s] features=[%s]%s ==> %s"
+          project_id sample_ids user_ids features
+          (match prune with None -> "" | Some i -> Printf.sprintf " prune=[%d]" i)
+          (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_pos_route =
+  Dream.post "getPOS"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (get_pos project_id) sample_ids in
+        Log.info "<getPOS> project_id=[%s] sample_ids=[%s] ==> %s"
+          project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
+let get_relations_route =
+  Dream.post "getRelations"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (get_relations project_id) sample_ids in
+        Log.info "<getRelations> project_id=[%s] sample_ids=[%s] ==> %s"
+          project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+let get_features_route =
+  Dream.post "getFeatures"
+    (fun request ->
+      match%lwt Dream.form ~csrf:false request with
+      | `Ok param ->
+        let project_id = List.assoc "project_id" param in
+        let sample_ids = List.assoc "sample_ids" param in
+        let json = wrap (get_features project_id) sample_ids in
+        Log.info "<getFeatures> project_id=[%s] sample_ids=[%s] ==> %s"
+          project_id sample_ids (report_status json);
+        reply json
+      | _ -> Dream.empty `Bad_Request
+    )
+
 
 let all_routes = [
   ping_route;
@@ -280,6 +440,20 @@ let all_routes = [
   get_sent_ids_route;
 
   save_conll_route;
+  insert_conll_route;
+  save_graph_route;
+
+  search_request_in_graphs_route;
+  relation_tables_route;
+  try_package_route;
+
+  export_project_route;
+  get_lexicon_route;
+
+  get_pos_route;
+  get_relations_route;
+  get_features_route;
+
 ]
 
 let _ =

@@ -1,4 +1,5 @@
 open Printf
+open Conll
 open Grewlib
 
 exception Error of string
@@ -107,19 +108,18 @@ let wrap fct last_arg =
       | l -> `Assoc [ ("status", `String "WARNING"); ("messages", `List l); ("data", data) ]
     with
     | Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
-    (* TODO: add Error from project specific librairies  *)
-    | exc -> `Assoc [ ("status", `String "BUG"); ("Unexpected exception", `String (Printexc.to_string exc)) ] in
+    | Conll_error json_msg -> `Assoc [ ("status", `String "ERROR"); ("message", json_msg) ]
+    | Grewlib.Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
+    | exc -> `Assoc [ ("status", `String "ERROR"); ("BUG, please report: Unexpected exception", `String (Printexc.to_string exc)) ] in
   json
 
 let reply json = Dream.respond (Yojson.Basic.pretty_to_string json)
-
 
 let _reply_error s = 
   let msg = sprintf "%s\n%!" s in
   reply (`Assoc [ ("status", `String "ERROR"); ("message", `String msg) ])
 
 let reply_error s = Printf.ksprintf _reply_error s
-
 
 (* General function for handling request with a mix of parameter and files *)
 let stream_request request = 
