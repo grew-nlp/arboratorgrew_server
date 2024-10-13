@@ -264,7 +264,7 @@ let insert_conll_route =
         let project_id = String_map.find "project_id" map in
         let sample_id = String_map.find "sample_id" map in
         let pivot_sent_id = String_map.find "pivot_sent_id" map in
-        let json = wrap (insert_conll project_id sample_id pivot_sent_id) file in
+        let json = wrap (insert_conll project_id sample_id file) pivot_sent_id in
         Log.info "<insertConll> project_id=[%s] sample_id=[%s] pivot_sent_id=[%s] ==> %s" project_id sample_id pivot_sent_id (report_status json);
         reply json
       | (_,l) ->

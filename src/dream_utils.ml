@@ -108,9 +108,12 @@ let wrap fct last_arg =
       | l -> `Assoc [ ("status", `String "WARNING"); ("messages", `List l); ("data", data) ]
     with
     | Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
+    | Sys_error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
     | Conll_error json_msg -> `Assoc [ ("status", `String "ERROR"); ("message", json_msg) ]
     | Grewlib.Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
-    | exc -> `Assoc [ ("status", `String "ERROR"); ("BUG, please report: Unexpected exception", `String (Printexc.to_string exc)) ] in
+    | exc -> 
+      let msg = sprintf "BUG [Unexpected exception], please report (%s)" (Printexc.to_string exc) in
+        `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ] in
   json
 
 let reply json = Dream.respond (Yojson.Basic.pretty_to_string json)
