@@ -1,4 +1,3 @@
-open Printf 
 open Conll
 
 open Grewlib
@@ -20,10 +19,10 @@ module User = struct
       | `String "all" -> All
       | `Assoc ["one", json_list] -> One (json_list |> to_list |> List.map to_string)
       | `Assoc ["multi", json_list] -> Multi (json_list |> to_list |> List.map to_string)
-      | _ -> raise (Error (sprintf "Invalid user_filter:%s\n" json_string))
+      | _ -> error "Invalid user_filter:%s\n" json_string
     with 
     | Type_error _ | Yojson.Json_error _ -> 
-      raise (Error (sprintf "Invalid user_filter:%s\n" json_string))
+      error "Invalid user_filter:%s\n" json_string
 end
 
 (* ================================================================================ *)
@@ -91,11 +90,8 @@ module Sentence = struct
     match user_filter with
     | User.Multi _ 
     | User.All ->
-        raise (Error (
-          sprintf "[%s] can be used only with user filters which produce at most one graph"
+        error "[%s] can be used only with user filters which produce at most one graph"
           (match caller with Some s -> s | None -> "Sentence.get_one")
-          )
-        )
     | User.One user_list ->
       let rec loop = function
       | [] -> None

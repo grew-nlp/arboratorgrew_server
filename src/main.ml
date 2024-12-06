@@ -457,13 +457,12 @@ let all_routes = [
 ]
 
 let _ =
-  let required = ["port"] in
+  let required = ["port"; "storage"] in
   Dream_config.load ~required ();
-  Log.init ();
+  Log.init ?prefix:(Dream_config.get_string_opt "prefix") ();
   let _ = 
     try Unix.mkdir (Dream_config.get_string "storage") 0o755
     with Unix.Unix_error(Unix.EEXIST, _, _) -> Ags_main.load_from_storage () in
-
   Dream.run
     ~error_handler:Dream.debug_error_handler
     ~port: (Dream_config.get_int "port")

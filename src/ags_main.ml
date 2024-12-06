@@ -47,7 +47,7 @@ let load_project project_id =
         | sample_id ->
           let conll_corpus =
             try Conll_corpus.load ~config (Filename.concat project_dir sample_id)
-            with Conll_error js -> raise (Error (sprintf "Conll_error: %s" (Yojson.Basic.pretty_to_string js))) in
+            with Conll_error js -> error "Conll_error: %s" (Yojson.Basic.pretty_to_string js) in
           let sample =
             Array.fold_left
               (fun acc2 (_, conllx)  ->
@@ -68,7 +68,7 @@ let load_project project_id =
 (* load project from disk if necessary *)
 let get_project project_id =
   match String_map.find_opt project_id !current_projects with
-  | None -> raise (Error (sprintf "[get_project] No project named '%s'" project_id))
+  | None -> error "[get_project] No project named '%s'" project_id
   | Some (Disk _) ->
     let project = load_project project_id in
     current_projects := String_map.add project_id (Mem (project, time ())) !current_projects; project
@@ -86,7 +86,7 @@ let update_project project_id new_project =
 let free_project project_id =
   let storage = Dream_config.get_string "storage" in
   match String_map.find_opt project_id !current_projects with
-  | None -> raise (Error (sprintf "[free_project] No project named '%s'" project_id))
+  | None -> error "[free_project] No project named '%s'" project_id
   | Some (Disk _) -> ()
   | Some (Mem (project,_)) ->
     let project_dir = Filename.concat storage project_id in
@@ -165,7 +165,7 @@ let get_sample project_id sample_id =
   try
     let project = get_project project_id in
     String_map.find sample_id project.samples
-  with Not_found -> raise (Error (sprintf "[project: %s] No sample named '%s'" project_id sample_id))
+  with Not_found -> error "[project: %s] No sample named '%s'" project_id sample_id
 
 let get_sample_opt project_id sample_id =
   let project = get_project project_id in
@@ -174,11 +174,11 @@ let get_sample_opt project_id sample_id =
 let get_project_sample project_id sample_id =
   let project = get_project project_id in
   try (project.config, project, String_map.find sample_id project.samples)
-  with Not_found -> raise (Error (sprintf "[project: %s] No sample named '%s'" project_id sample_id))
+  with Not_found -> error "[project: %s] No sample named '%s'" project_id sample_id
 
 let get_sentence project_id sample_id sent_id =
   try String_map.find sent_id (get_sample project_id sample_id).Sample.data
-  with Not_found -> raise (Error (sprintf "[project: %s, sample:%s] No sent_id '%s'" project_id sample_id sent_id))
+  with Not_found -> error "[project: %s, sample:%s] No sent_id '%s'" project_id sample_id sent_id
 
 (* ================================================================================ *)
 (* general storage function in the current data *)
@@ -195,7 +195,7 @@ let safe_set_meta feat value graph =
   match Graph.get_meta_opt feat graph with
   | None -> Graph.set_meta feat value graph
   | Some v when v = value -> graph
-  | Some v -> raise (Error (sprintf "Inconsistent metadata `%s`: value `%s` in data is different from value `%s` in request" feat v value))
+  | Some v -> error "Inconsistent metadata `%s`: value `%s` in data is different from value `%s` in request" feat v value
 
 let update_conll_data project_id sample_id sent_id user_id conllx =
   let (_, project, sample) = get_project_sample project_id sample_id in
@@ -255,7 +255,7 @@ let save_conll project_id sample_id conll_file =
 
   let conll_corpus =
     try Conll_corpus.load ~config conll_file
-    with Conll_error js -> raise (Error (sprintf "Conll_error: %s" (Yojson.Basic.pretty_to_string js))) in
+    with Conll_error js -> error "Conll_error: %s" (Yojson.Basic.pretty_to_string js) in
 
   let new_sample = Array.fold_left (
     fun acc (sent_id, conllx) ->
@@ -266,7 +266,7 @@ let save_conll project_id sample_id conll_file =
     let user_id = 
       match Graph.get_meta_opt "user_id" graph 
       with Some x -> x 
-      | _ -> raise (Error (sprintf "Missing user_id with sent_id `%s`" sent_id)) in
+      | _ -> error "Missing user_id with sent_id `%s`" sent_id in
     let new_sentence = Sentence.add_graph user_id graph sentence in
   
     let new_rev_order =
@@ -291,7 +291,7 @@ let insert_conll project_id sample_id conll_file after_sent_id =
   let (config, project, sample) = get_project_sample project_id sample_id in
   let conll_corpus =
     try Conll_corpus.load ~config tmp_filename
-    with Conll_error js -> raise (Error (sprintf "Conll_error: %s" (Yojson.Basic.pretty_to_string js))) in
+    with Conll_error js -> error "Conll_error: %s" (Yojson.Basic.pretty_to_string js) in
 
   let (new_data, new_sent_id_list) = 
     Array.fold_left (
@@ -303,7 +303,7 @@ let insert_conll project_id sample_id conll_file after_sent_id =
     let user_id = 
       match Graph.get_meta_opt "user_id" graph 
       with Some x -> x 
-      | _ -> raise (Error (sprintf "Missing user_id with sent_id `%s`" sent_id)) in
+      | _ -> error "Missing user_id with sent_id `%s`" sent_id in
     let new_sentence = Sentence.add_graph user_id graph sentence in
   
     let updated_sent_id_list =
@@ -326,7 +326,7 @@ let insert_conll project_id sample_id conll_file after_sent_id =
 (* ================================================================================ *)
 let new_project project_id =
   if String_map.mem project_id !current_projects
-  then raise (Error (sprintf "project '%s' already exists" project_id));
+  then error "project '%s' already exists" project_id;
   update_project project_id Project.empty;
   Unix.mkdir (Filename.concat (Dream_config.get_string "storage") project_id) 0o755;
   `Null
@@ -368,7 +368,7 @@ let erase_project project_id =
 
 let rename_project project_id new_project_id =
   if String_map.mem new_project_id !current_projects
-  then raise (Error (sprintf "[project: %s] already exists" new_project_id));
+  then error "[project: %s] already exists" new_project_id;
 
   (* local update *)
   let project = get_project project_id in
@@ -421,7 +421,7 @@ let new_samples project_id sample_ids =
     | [] -> ()
     | l -> 
       let len = List.length l in 
-      raise (Error (sprintf "%d sample%s [%s] already exists in project '%s'" len (if len > 0 then "s" else "") (String.concat ", " l) project_id)) in
+      error "%d sample%s [%s] already exists in project '%s'" len (if len > 0 then "s" else "") (String.concat ", " l) project_id in
   let project_dir = Filename.concat (Dream_config.get_string "storage") project_id in
   let project_new_samples = List.fold_left
   (fun acc sample_id ->
@@ -450,7 +450,7 @@ let erase_samples project_id sample_ids =
 let rename_sample project_id sample_id new_sample_id =
   let (_, project, sample) = get_project_sample project_id sample_id in
   if String_map.mem new_sample_id project.samples
-  then raise (Error (sprintf "[project: %s] sample %s already exists" project_id new_sample_id));
+  then error "[project: %s] sample %s already exists" project_id new_sample_id;
   let new_project = { project with samples = String_map.add new_sample_id sample (String_map.remove sample_id project.samples) } in
 
   update_project project_id new_project;
@@ -493,7 +493,7 @@ let get_conll__user project_id sample_id sent_id user_id =
   let config = get_config project_id in
   let sentence = get_sentence project_id sample_id sent_id in
   match Sentence.find_opt user_id sentence with
-  | None -> raise (Error (sprintf "[project: %s, sample:%s, sent_id=%s] No user '%s'" project_id sample_id sent_id user_id))
+  | None -> error "[project: %s, sample:%s, sent_id=%s] No user '%s'" project_id sample_id sent_id user_id
   | Some graph -> `String (graph |> Graph.to_json |> Conll.of_json |> Conll.to_string ~config)
 
 let get_conll__sent_id project_id sample_id sent_id =
@@ -619,7 +619,7 @@ let try_package project_id sample_ids user_ids package =
   let _ = 
     match user_filter with 
     | One _ -> () 
-    | _ -> raise (Error "The tryPackage service can be used only with user filters which return at most one graph (see https://github.com/Arborator/arborator-frontend/issues/222)") in
+    | _ -> error "The tryPackage service can be used only with user filters which return at most one graph (see https://github.com/Arborator/arborator-frontend/issues/222)" in
   let output =
     Project.fold_filter ~user_filter ~sample_filter: (Project.sample_filter_from_json_string sample_ids)
       (fun sample_id sent_id user_id graph acc ->
@@ -639,7 +639,7 @@ let try_package project_id sample_ids user_ids package =
                ("modified_edges", modified_edges);
                ("modified_nodes", modified_nodes);
              ] :: acc
-           | _ -> raise (Error "BUG: [try_package] Graph.to_json is not an object")
+           | _ -> error "BUG: [try_package] Graph.to_json is not an object"
       ) project [] in
   `List output
 

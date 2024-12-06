@@ -2,8 +2,8 @@ open Printf
 open Conll
 open Grewlib
 
-exception Error of string
-let _error s = raise (Error (sprintf "%s\n%!" s))
+exception Error of Yojson.Basic.t
+let _error s = raise (Error (`String (sprintf "%s\n%!" s)))
 let error s = Printf.ksprintf _error s
 
 let _stop s = 
@@ -26,7 +26,10 @@ module Dream_config = struct
   let current = ref []
   let load ?(required=[]) () =
     let open Yojson.Basic.Util in
-    let config_file = Filename.concat (Unix.getcwd()) "dream_config.json" in
+    let config_file =
+      if Array.length Sys.argv > 1
+      then Sys.argv.(1)
+      else error "a config file must be given in the command line" in
     try
       current :=
         config_file
@@ -74,12 +77,12 @@ module Log = struct
       gm.Unix.tm_min
       gm.Unix.tm_sec
 
-  let init () =
+  let init ?(prefix="dream") () =
     match Dream_config.get_string_opt "log" with
     | None -> ()
     | Some log_dir ->
       try
-        let basename = Printf.sprintf "ag_server_%s.log" (time_stamp ()) in
+        let basename = Printf.sprintf "%s_%s.log" prefix (time_stamp ()) in
         let filename = Filename.concat log_dir basename in
         out_ch := open_out filename
       with Sys_error msg -> stop "%s" msg
@@ -107,7 +110,7 @@ let wrap fct last_arg =
       | [] -> `Assoc [ ("status", `String "OK"); ("data", data) ]
       | l -> `Assoc [ ("status", `String "WARNING"); ("messages", `List l); ("data", data) ]
     with
-    | Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
+    | Error json_msg -> `Assoc [ ("status", `String "ERROR"); ("message", json_msg) ]
     | Sys_error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
     | Conll_error json_msg -> `Assoc [ ("status", `String "ERROR"); ("message", json_msg) ]
     | Grewlib.Error msg -> `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ]
