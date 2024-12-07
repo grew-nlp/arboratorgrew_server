@@ -381,7 +381,7 @@ let get_pos_route =
       | `Ok param ->
         let project_id = List.assoc "project_id" param in
         let sample_ids = List.assoc "sample_ids" param in
-        let json = wrap (get_pos project_id) sample_ids in
+        let json = wrap (get_pos sample_ids) project_id in
         Log.info "<getPOS> project_id=[%s] sample_ids=[%s] ==> %s"
           project_id sample_ids (report_status json);
         reply json
@@ -395,7 +395,7 @@ let get_relations_route =
       | `Ok param ->
         let project_id = List.assoc "project_id" param in
         let sample_ids = List.assoc "sample_ids" param in
-        let json = wrap (get_relations project_id) sample_ids in
+        let json = wrap (get_relations sample_ids) project_id in
         Log.info "<getRelations> project_id=[%s] sample_ids=[%s] ==> %s"
           project_id sample_ids (report_status json);
         reply json
@@ -408,7 +408,7 @@ let get_features_route =
       | `Ok param ->
         let project_id = List.assoc "project_id" param in
         let sample_ids = List.assoc "sample_ids" param in
-        let json = wrap (get_features project_id) sample_ids in
+        let json = wrap (get_features sample_ids) project_id in
         Log.info "<getFeatures> project_id=[%s] sample_ids=[%s] ==> %s"
           project_id sample_ids (report_status json);
         reply json
