@@ -745,8 +745,9 @@ let get_relations sample_ids project_id =
   let config = get_config project_id in
   string_set_collect (Graph.get_relations ~config) sample_ids project_id
   
-let get_features = string_set_collect Graph.get_features
-
+let decode_feat_name s = Str.global_replace (Str.regexp "__\\([0-9a-z]+\\)$") "[\\1]" s
+let get_features = 
+  string_set_collect (fun g -> String_set.map decode_feat_name (Graph.get_features g))
 
 let add_graph_in_relation_tables ~config graph relation_tables =
   let request = Request.parse ~config "pattern { e: GOV -> DEP}" in
