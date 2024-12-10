@@ -1,6 +1,6 @@
 {
 	"port": 8080,
-	"prefix": "ag_server",
+	"prefix": "arboratorgrew_server",
 	"storage": "/Users/guillaum/.local/arborator_grew/storage",
-	"log": "/Users/guillaum/github/grew-nlp/ag_server/log"
+	"log": "/Users/guillaum/github/grew-nlp/arboratorgrew_server/log"
 }

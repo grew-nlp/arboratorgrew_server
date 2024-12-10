@@ -1,5 +1,5 @@
 (executable
- (public_name ag_server)
+ (public_name arboratorgrew_server)
  (name main)
  (libraries yojson dream ANSITerminal conll grewlib)
  (preprocess (pps lwt_ppx))

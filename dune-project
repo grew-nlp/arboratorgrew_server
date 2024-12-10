@@ -1,26 +1,27 @@
 (lang dune 3.16)
 
-(name ag_server)
+(name arboratorgrew_server)
 
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github grew-nlp/arboratorgrew_server))
 
-(authors "Author Name")
+(authors "Bruno Guillaume")
 
-(maintainers "Maintainer Name")
+(maintainers "Bruno Guillaume")
 
 (license LICENSE)
 
-(documentation https://url/to/documentation)
+(documentation https://grew.fr/usage/grew_server/)
 
 (package
- (name ag_server)
- (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune)
+ (name arboratorgrew_server)
+ (synopsis "An API for the Arborator-Grew annotation tool")
+ (depends ocaml dune yojson dream ANSITerminal conll grewlib)
  (tags
-  (topics "to describe" your project)))
+  ("NLP" "Annotation tool" "Grew")
+ )
+)
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
