@@ -294,6 +294,10 @@ let search_request_in_graphs_route =
       | `Ok param ->
         let project_id = List.assoc "project_id" param in
         let user_ids = List.assoc "user_ids" param in
+        let sample_ids =
+          match List.assoc_opt "sample_ids" param with
+          | None -> "[]"
+          | Some s -> s in
         let request = List.assoc "request" param in
         let clusters_opt = List.assoc_opt "clusters" param in
 
@@ -301,7 +305,7 @@ let search_request_in_graphs_route =
           | Some clusters -> Str.split (Str.regexp " *; *") clusters
           | None -> [] in
 
-        let json = wrap (search_request_in_graphs project_id user_ids request) cluster_keys in
+        let json = wrap (search_request_in_graphs project_id sample_ids user_ids request) cluster_keys in
         Log.info "<searchRequestInGraphs> project_id=[%s] user_ids=[%s] request=[%s]%s ==> %s"
           project_id user_ids request 
           (match clusters_opt with None -> "" | Some s -> Printf.sprintf " clusters=[%s]" s)

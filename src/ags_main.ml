@@ -555,13 +555,13 @@ let add_graph_in_cluster_output ~config sample_id sent_id user_id clust_keys req
          Cluster_output.insert ~config prefix clust_keys request graph matching acc
       ) cluster_output matching_list
 
-let search_request_in_graphs project_id user_ids string_request clust_keys =
+let search_request_in_graphs project_id sample_ids user_ids string_request clust_keys =
   let config = get_config project_id in
   let project = get_project project_id in
   let request = Request.parse ~config string_request in
 
   let cluster_output =
-    Project.fold_filter ~user_filter: (User.filter_of_json_string user_ids)
+    Project.fold_filter ~user_filter: (User.filter_of_json_string user_ids) ~sample_filter: (Project.sample_filter_from_json_string sample_ids)
       (fun sample_id sent_id user_id graph acc -> 
          add_graph_in_cluster_output ~config sample_id sent_id user_id clust_keys request graph acc
       ) project (Cluster_output.init clust_keys) in
