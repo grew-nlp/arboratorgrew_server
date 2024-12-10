@@ -6,8 +6,9 @@ print ('========== [ping]')
 ping ()
 
 project_id = "__gst__searchRequestInGraphs"
-sample_ids = '["sample_1"]'
-sample_id = "sample_1"
+sample_id1 = "sample_1"
+sample_id2 = "sample_2"
+sample_ids = f'["{sample_id1}", "{sample_id2}"]'
 
 print ('========== [newProject]')
 print ('       ... project_id -> ' + project_id)
@@ -35,12 +36,12 @@ conll_file = "data/file1.conllu"
 
 print ('========== [saveConll]')
 print ('       ... project_id -> ' + project_id)
-print ('       ... sample_id -> ' + sample_id)
+print ('       ... sample_id -> ' + sample_id1)
 print ('       ... conll_file -> ' + conll_file)
 with open(conll_file, 'rb') as f:
     reply = send_request (
         'saveConll',
-        data = {'project_id': project_id, 'sample_id': sample_id },
+        data = {'project_id': project_id, 'sample_id': sample_id1 },
         files={'conll_file': f},
     )
 check_reply (reply, None)
@@ -49,12 +50,12 @@ conll_file = "data/file2.conllu"
 
 print ('========== [saveConll]')
 print ('       ... project_id -> ' + project_id)
-print ('       ... sample_id -> ' + sample_id)
+print ('       ... sample_id -> ' + sample_id1)
 print ('       ... conll_file -> ' + conll_file)
 with open(conll_file, 'rb') as f:
     reply = send_request (
         'saveConll',
-        data = {'project_id': project_id, 'sample_id': sample_id },
+        data = {'project_id': project_id, 'sample_id': sample_id1 },
         files={'conll_file': f},
     )
 check_reply (reply, None)
@@ -79,9 +80,9 @@ conll_graph = """# text = Les spéculations autour du match sont à leur paroxys
 
 print ('========== [saveGraph] ')
 print ('       ... project_id -> ' + project_id)
-print ('       ... sample_id -> ' + sample_id)
+print ('       ... sample_id -> ' + sample_id1)
 print ('       ... conll_graph -> …')
-reply = send_request ('saveGraph', data={'project_id': project_id, 'sample_id': sample_id, 'user_id': user_id, 'conll_graph': conll_graph})
+reply = send_request ('saveGraph', data={'project_id': project_id, 'sample_id': sample_id1, 'user_id': user_id, 'conll_graph': conll_graph})
 check_reply (reply, None)
 
 print ('========== [getProjects]')
@@ -89,7 +90,7 @@ reply = send_request ('getProjects', data={})
 short_list = [x for x in parse_reply(reply) if x["name"] == project_id]
 check_value (
     short_list,
-    [{'name': project_id, 'number_samples': 1, 'number_sentences': 1, 'number_tokens': 12, 'number_trees': 3, 'users': ['alice', 'bob', 'toto']}]
+    [{'name': project_id, 'number_samples': 2, 'number_sentences': 1, 'number_tokens': 12, 'number_trees': 3, 'users': ['alice', 'bob', 'toto']}]
 )
 
 print('========== [searchRequestInGraphs]')
@@ -121,6 +122,53 @@ if len(data['VERB']) == 1 and len(data['AUX']) == 1 and len(data['NOUN']) == 1:
 else:
     print_ko ("VERB:1, AUX:1; NOUN:1")
 
-time.sleep (5)
 
-print_ok ('Go on')
+user_id = 'alice'
+conll_graph = """# sent_id = fr-ud-train_13868
+# text = Cette agence est une vraie catastrophe !
+1	Cette	ce	DET	_	Gender=Fem|Number=Sing|PronType=Dem	2	det	_	wordform=cette
+2	agence	agence	NOUN	_	Gender=Fem|Number=Sing	3	subj	_	_
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	6	det	_	_
+5	vraie	vrai	ADJ	_	Gender=Fem|Number=Sing	6	mod	_	_
+6	catastrophe	catastrophe	NOUN	_	Gender=Fem|Number=Sing	3	comp:pred	_	_
+7	!	!	PUNCT	_	_	3	punct	_	_
+
+"""
+
+print ('========== [saveGraph] ')
+print ('       ... project_id -> ' + project_id)
+print ('       ... sample_id -> ' + sample_id2)
+print ('       ... user_id -> ' + user_id)
+print ('       ... conll_graph -> …')
+reply = send_request ('saveGraph', data={'project_id': project_id, 'sample_id': sample_id2, 'user_id': user_id, 'conll_graph': conll_graph})
+check_reply (reply, None)
+
+
+request = 'pattern { X[upos=DET] }'
+user_ids = f'{{ "one": ["{user_id}"] }}'
+
+print('========== [searchRequestInGraphs]')
+sample_ids = f'["{sample_id1}"]'
+print('       ... project_id -> %s' % project_id)
+print('       ... sample_ids -> %s' % sample_ids)
+print('       ... user_ids -> %s' % user_ids)
+print('       ... request -> %s' % request)
+reply = send_request(
+    'searchRequestInGraphs',
+    data={'project_id': project_id, 'sample_ids': sample_ids, 'user_ids': user_ids, 'request': request}
+)
+check_reply_list(reply,3)
+
+sample_ids = f'["{sample_id2}"]'
+print('========== [searchRequestInGraphs]')
+print('       ... project_id -> %s' % project_id)
+print('       ... sample_ids -> %s' % sample_ids)
+print('       ... user_ids -> %s' % user_ids)
+print('       ... request -> %s' % request)
+reply = send_request(
+    'searchRequestInGraphs',
+    data={'project_id': project_id, 'sample_ids': sample_ids, 'user_ids': user_ids, 'request': request}
+)
+check_reply_list(reply,2)
+
