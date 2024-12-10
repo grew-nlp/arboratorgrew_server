@@ -738,16 +738,29 @@ let string_set_collect fct sample_ids project_id =
                   ) sentence acc2
              ) sample acc
       ) String_set.empty sample_id_list in
-  `List (List.map (fun x -> `String x) (String_set.elements string_set))
+  String_set.elements string_set
 
-let get_pos = string_set_collect (Graph.get_feature_values "upos")
+let string_list_to_json l = `List (List.map (fun x -> `String x) l)
+
+let get_pos sample_ids project_id =
+  string_set_collect (Graph.get_feature_values "upos") sample_ids project_id
+  |> string_list_to_json
+
 let get_relations sample_ids project_id =
   let config = get_config project_id in
   string_set_collect (Graph.get_relations ~config) sample_ids project_id
-  
+  |> string_list_to_json
+
 let decode_feat_name s = Str.global_replace (Str.regexp "__\\([0-9a-z]+\\)$") "[\\1]" s
-let get_features = 
-  string_set_collect (fun g -> String_set.map decode_feat_name (Graph.get_features g))
+let get_features sample_ids project_id =
+  let config = get_config project_id in
+  let full_list = string_set_collect (fun g -> String_set.map decode_feat_name (Graph.get_features g)) sample_ids project_id in
+  let filtered_list = List.filter (fun x -> not (List.mem x ["upos"; "xpos"; "form"; "lemma"; "textform"; "wordform"])) full_list in
+  let (feats, misc) = List.partition (Conll_config.is_in_FEATS config) filtered_list in
+  `Assoc [
+    "FEATS", string_list_to_json feats;
+    "MISC", string_list_to_json misc;
+  ]
 
 let add_graph_in_relation_tables ~config graph relation_tables =
   let request = Request.parse ~config "pattern { e: GOV -> DEP}" in
