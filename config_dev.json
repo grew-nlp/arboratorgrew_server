@@ -1,0 +1,6 @@
+{
+	"port": 9876,
+	"prefix": "arboratorgrew_server_dev",
+	"storage": "/home/guillaum/arborator_grew_dev/storage",
+	"log": "/home/guillaum/arborator_grew_dev/log"
+}
