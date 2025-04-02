@@ -1,4 +1,7 @@
 open Grewlib
+open Conll
+
+open Dream_utils
 
 open Ags_sentence
 
@@ -10,22 +13,23 @@ module Sample = struct
     data: Sentence.t String_map.t; (* keys are sent_id *)
   }
 
+  let empty = { rev_order = []; data = String_map.empty }
 
   let insert sent_id user_id graph t =
     match String_map.find_opt sent_id t.data with
     | None -> { rev_order = sent_id :: t.rev_order; data = String_map.add sent_id (Sentence.add_graph user_id graph Sentence.empty) t.data }
     | Some sent -> { t with data = String_map.add sent_id (Sentence.add_graph user_id graph sent) t.data }
 
-  let empty = { rev_order = []; data = String_map.empty }
-
   let users t =
     String_map.fold
-      (fun _ sentence acc -> String_set.union acc (Sentence.get_users sentence)
+      (fun _ sentence acc ->
+        String_set.union acc (Sentence.get_users sentence)
       ) t.data String_set.empty
 
   let tags t =
     String_map.fold
-      (fun _ sentence acc -> Sentence.append_tags acc sentence)
+      (fun _ sentence acc -> 
+        Sentence.append_tags acc sentence)
        t.data String_map.empty
 
   let tree_by_user t =
@@ -73,6 +77,23 @@ module Sample = struct
       (fun sent_id ->
          Sentence.save ~config out_ch (String_map.find sent_id t.data)
       ) (List.rev t.rev_order)
+
+
+  let load ~config project_dir filename = 
+    let conll_corpus =
+      try Conll_corpus.load ~config (Filename.concat project_dir filename)
+      with Conll_error js -> error "Conll_error: %s" (Yojson.Basic.pretty_to_string js) in
+    Array.fold_left
+      (fun acc (_, conll) ->
+        match List.assoc_opt "user_id" (Conll.get_meta conll) with
+        | None -> warn "No user_id found, conll skipped"; acc
+        | Some user_id ->
+          match List.assoc_opt "sent_id" (Conll.get_meta conll) with
+          | None -> warn "No sent_id found, conll skipped"; acc
+          | Some sent_id ->
+            let graph = conll |> Conll.to_json |> Graph.of_json in
+            insert sent_id user_id graph acc
+      ) empty (Conll_corpus.get_data conll_corpus)
 
   let rec list_remove_item item = function
     | [] -> []

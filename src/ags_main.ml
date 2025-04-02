@@ -45,24 +45,13 @@ let load_project project_id =
       (fun file acc -> match file with
         | filename when Filename.check_suffix filename ".json" -> acc
         | sample_id ->
-          let conll_corpus =
-            try Conll_corpus.load ~config (Filename.concat project_dir sample_id)
-            with Conll_error js -> error "Conll_error: %s" (Yojson.Basic.pretty_to_string js) in
-          let sample =
-            Array.fold_left
-              (fun acc2 (_, conllx)  ->
-                match List.assoc_opt "user_id" (Conll.get_meta conllx) with
-                | None -> warn "No user_id found, conll skipped"; acc2
-                | Some user_id ->
-                  match List.assoc_opt "sent_id" (Conll.get_meta conllx) with
-                  | None -> warn "No sent_id found, conll skipped"; acc2
-                  | Some sent_id ->
-                    let (graph : Graph.t) = conllx |> Conll.to_json |> Graph.of_json in
-                    Sample.insert sent_id user_id graph acc2
-              ) Sample.empty (Conll_corpus.get_data conll_corpus) in
+          let sample = Sample.load ~config project_dir sample_id in
           String_map.add sample_id sample acc
       ) String_map.empty project_dir in
   Project.update_infos {Project.config_json; config; samples; infos=Project_info.zero }
+
+let update_project project_id project =
+  current_projects := String_map.add project_id (Mem (project, time ())) !current_projects
 
 
 (* load project from disk if necessary *)
@@ -71,16 +60,15 @@ let get_project project_id =
   | None -> error "[get_project] No project named '%s'" project_id
   | Some (Disk _) ->
     let project = load_project project_id in
-    current_projects := String_map.add project_id (Mem (project, time ())) !current_projects; project
+    update_project project_id project;
+    project
   | Some (Mem (project,_)) ->
-    current_projects := String_map.add project_id (Mem (project, time ())) !current_projects; project
+    update_project project_id project;
+    project
 
 let get_config project_id =
   let project = get_project project_id in
   project.config
-
-let update_project project_id new_project =
-  current_projects := String_map.add project_id (Mem (new_project, time ())) !current_projects
 
 (* force to free a project in mem *)
 let free_project project_id =
@@ -697,10 +685,12 @@ let get_lexicon features ?prune project_id user_ids sample_ids =
   let feature_name_list = parse_json_string_list "features" features in
   let project = get_project project_id in
   let full_lexicon =
-    Project.fold_filter ~user_filter: (User.filter_of_json_string user_ids) ~sample_filter: (Project.sample_filter_from_json_string sample_ids)
+    Project.fold_filter
+      ~user_filter: (User.filter_of_json_string user_ids)
+      ~sample_filter: (Project.sample_filter_from_json_string sample_ids)
       (fun _ _ _ graph acc -> 
          Graph.append_in_ag_lex feature_name_list graph acc
-      ) project (Clustered.empty 0) in
+      ) project (Clustered.empty (List.length feature_name_list)) in
   let lexicon = match prune with
     | Some d -> Clustered.prune_unambiguous d full_lexicon
     | None -> full_lexicon in
@@ -728,15 +718,15 @@ let string_set_collect fct sample_ids project_id =
   let string_set = 
     List.fold_left
       (fun acc sample_id ->
-         match get_sample_opt project_id sample_id with
-         | None -> acc
-         | Some sample ->
-           Sample.fold_sentence
-             (fun _ sentence acc2 ->
-                Sentence.fold
-                  (fun _ graph acc3 -> String_set.union (fct graph) acc3
-                  ) sentence acc2
-             ) sample acc
+        match get_sample_opt project_id sample_id with
+        | None -> acc
+        | Some sample ->
+          Sample.fold_sentence
+            (fun _ sentence acc2 ->
+              Sentence.fold
+                (fun _ graph acc3 -> String_set.union (fct graph) acc3
+                ) sentence acc2
+            ) sample acc
       ) String_set.empty sample_id_list in
   String_set.elements string_set
 
@@ -795,24 +785,26 @@ let relation_tables project_id sample_ids user_ids =
       (fun _ _ _ graph acc -> 
         add_graph_in_relation_tables ~config graph acc
       ) project String_map.empty in
-  let json = `Assoc
+  let json = 
+    `Assoc
       (String_map.fold
-         (fun lab map1 acc1 ->
-            let json1 = `Assoc 
-                (String_map.fold
-                   (fun gov map2 acc2 ->
-                      let json2 = `Assoc 
-                          (String_map.fold
-                             (fun dep count acc3 ->
-                                (dep, `Int count ) :: acc3
-                             ) map2 []
-                          ) in
-                      (gov, json2 ) :: acc2
-                   ) map1 []
-                )
-            in
-            (lab, json1 ) :: acc1
-         ) map []
+        (fun lab map1 acc1 ->
+          let json1 =
+            `Assoc 
+              (String_map.fold
+                (fun gov map2 acc2 ->
+                  let json2 =
+                    `Assoc 
+                      (String_map.fold
+                        (fun dep count acc3 ->
+                          (dep, `Int count ) :: acc3
+                        ) map2 []
+                      ) in
+                  (gov, json2 ) :: acc2
+                ) map1 []
+              ) in
+          (lab, json1 ) :: acc1
+        ) map []
       ) in
   json
 
