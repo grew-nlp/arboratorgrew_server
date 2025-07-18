@@ -1,0 +1,6 @@
+{
+	"port": 8080,
+	"prefix": "arboratorgrew_server_prod",
+	"storage": "/home/arboratorgrew/arboratorgrew/storage",
+	"log": "/home/arboratorgrew/arboratorgrew/log"
+}
