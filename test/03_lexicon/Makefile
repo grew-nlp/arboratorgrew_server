@@ -30,5 +30,5 @@ prod:
 	@echo "======================================================================================================="
 	python3 0_clean.py prod
 	python3 1_init.py prod
-	python3 2_search.py prod
+	python3 2_get_lexicon.py prod
 	python3 0_clean.py prod

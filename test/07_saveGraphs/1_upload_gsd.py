@@ -21,7 +21,7 @@ check_reply(reply, None)
 
 for sample_id in ["dev"]:
 
-    conll_file = "../GSD/fr_gsd-sud-%s.conllu" % sample_id
+    conll_file = "../GSD_with_user_id/fr_gsd-sud-%s.conllu" % sample_id
 
     print('===== 03 ===== [saveConll]')
     print('       ... project_id -> ' + project_id)

@@ -13,7 +13,7 @@ def print_ko(msg):
     print(colored(msg, 'red'))
 
 if (len(sys.argv) > 1 and sys.argv[1] == "prod"):
-    server = 'http://arborator.grew.fr'
+    server = 'http://ag-prod.grew.fr'
 elif (len(sys.argv) > 1 and sys.argv[1] == "dev"):
     server = 'http://arborator-dev.grew.fr'
 else:
