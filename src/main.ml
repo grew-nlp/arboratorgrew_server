@@ -22,7 +22,7 @@ let get_projects_route =
       match%lwt Dream.body request with
       | "" -> 
         let json = wrap get_projects () in
-        Log.info "<newProject> ==> %s" (report_status json);
+        Log.info "<getProjects> ==> %s" (report_status json);
         reply json
       | _ -> Dream.empty `Bad_Request
     )
