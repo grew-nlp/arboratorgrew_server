@@ -690,7 +690,7 @@ let get_lexicon features ?prune project_id user_ids sample_ids =
       ~sample_filter: (Project.sample_filter_from_json_string sample_ids)
       (fun _ _ _ graph acc -> 
          Graph.append_in_ag_lex feature_name_list graph acc
-      ) project (Clustered.empty (List.length feature_name_list)) in
+      ) project Clustered.empty in
   let lexicon = match prune with
     | Some d -> Clustered.prune_unambiguous d full_lexicon
     | None -> full_lexicon in

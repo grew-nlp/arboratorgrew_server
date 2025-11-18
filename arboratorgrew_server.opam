@@ -15,7 +15,7 @@ depends: [
   "dream"
   "ANSITerminal"
   "conll"
-  "grewlib"
+  "grewlib" {>= "1.19.0"}
   "odoc" {with-doc}
 ]
 build: [

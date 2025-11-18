@@ -18,7 +18,15 @@
 (package
  (name arboratorgrew_server)
  (synopsis "An API for the Arborator-Grew annotation tool")
- (depends ocaml dune yojson dream ANSITerminal conll grewlib)
+ (depends 
+  ocaml
+  dune
+  yojson
+  dream
+  ANSITerminal
+  conll
+  (grewlib ( >= "1.19.0" ))
+ )
  (tags
   ("NLP" "Annotation tool" "Grew")
  )
