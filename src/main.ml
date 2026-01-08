@@ -468,6 +468,7 @@ let _ =
     try Unix.mkdir (Dream_config.get_string "storage") 0o755
     with Unix.Unix_error(Unix.EEXIST, _, _) -> Ags_main.load_from_storage () in
   Dream.run
+    ~interface: "0.0.0.0"
     ~error_handler:Dream.debug_error_handler
     ~port: (Dream_config.get_int "port")
   @@ Dream.logger
