@@ -1,0 +1,6 @@
+{
+        "port": 8222,
+        "prefix": "arboratorgrew_server",
+        "storage": "/var/storage/grew-server",
+        "log": "/var/log/grew-server"
+}
