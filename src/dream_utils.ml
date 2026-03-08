@@ -119,7 +119,10 @@ let wrap fct last_arg =
         `Assoc [ ("status", `String "ERROR"); ("message", `String msg) ] in
   json
 
-let reply json = Dream.respond (Yojson.Basic.pretty_to_string json)
+let reply json = 
+  Dream.respond
+    ~headers: [("Content-Type","text/html; charset=utf-8")]
+    (Yojson.Basic.pretty_to_string json)
 
 let _reply_error s = 
   let msg = sprintf "%s\n%!" s in
