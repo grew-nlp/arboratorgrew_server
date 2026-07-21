@@ -121,7 +121,7 @@ let wrap fct last_arg =
 
 let reply json = 
   Dream.respond
-    ~headers: [("Content-Type","text/html; charset=utf-8")]
+    ~headers: [("Content-Type","application/json; charset=utf-8")]
     (Yojson.Basic.pretty_to_string json)
 
 let _reply_error s = 
