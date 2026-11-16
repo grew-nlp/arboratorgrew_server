@@ -64,18 +64,26 @@ module Sentence = struct
 
   let mapi = String_map.mapi
 
-  let most_recent t =
+  let re_match re s = (Str.string_match re s 0) && (Str.matched_string s = s)
+
+  let is_draft user_id =
+    Str.string_match (Str.regexp "^.+_draft[0-9]+$") user_id 0
+
+  let most_recent t : (string * Graph.t) option =
     fold
       (fun user_id graph acc ->
-         match (Graph.get_meta_opt "timestamp" graph, acc) with
-         | (None, _) -> acc
-         | (Some string_ts, None) -> Some ((user_id, graph),float_of_string string_ts)
-         | (Some string_new_ts, Some (old_data,old_ts)) ->
-           let new_ts = float_of_string string_new_ts in
-           if new_ts > old_ts
-           then Some ((user_id,graph), new_ts)
-           else Some (old_data, old_ts)
-      ) t None |> CCOption.map fst |> fun (x : (string * Graph.t) option) -> x
+        if is_draft user_id then
+          acc
+        else
+          match (Graph.get_meta_opt "timestamp" graph, acc) with
+          | (None, _) -> acc
+          | (Some string_ts, None) -> Some ((user_id, graph),float_of_string string_ts)
+          | (Some string_new_ts, Some (old_data,old_ts)) ->
+            let new_ts = float_of_string string_new_ts in
+            if new_ts > old_ts
+            then Some ((user_id,graph), new_ts)
+            else Some (old_data, old_ts)
+      ) t None |> CCOption.map fst
 
   let save ~config out_ch t =
     String_map.iter
