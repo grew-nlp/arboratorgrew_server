@@ -16,13 +16,13 @@ RUN apt-get update && apt-get install -y \
 
 
 RUN opam init -y
-RUN opam switch create 5.2.1
+RUN opam switch create 5.5.2
 
 RUN git clone https://github.com/grew-nlp/arboratorgrew_server.git
 RUN cd arboratorgrew_server
 
 RUN <<EOF
-eval $(opam env --switch=5.2.1)
+eval $(opam env --switch=5.5.2)
 opam remote add grew "https://opam.grew.fr"
 opam install dune dream grewlib -y
 cd arboratorgrew_server
